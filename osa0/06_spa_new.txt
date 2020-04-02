@@ -1,0 +1,37 @@
+title SPA new
+
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa
+palvelin-->selain: HTML-koodi
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/spa.js
+palvelin-->selain: spa.js
+
+note over selain:
+selain alkaa suorittaa js-koodia
+joka pyytää JSON-datan palvelimelta
+end note
+
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/data.json
+palvelin-->selain: [{ content: "HTML on helppoa", date: "2019-01-01" }, ...]
+
+note over selain:
+selain suorittaa tapahtumankäsittelijän
+joka renderöi muistiinpanot näytölle
+end note
+
+note over selain:
+Käyttäjä täyttää lomakkeen ja painaa Save-painiketta. spa.js lähettää POST:illa JSON:in palvelimelle. 
+Estäen lomakkeen normaalin toiminnan.
+end note
+
+note over selain:
+redrawNotes funktio renderöi uuden noten selaimessa paikallisti
+end note
+
+selain->palvelin: HTTP POST (XHR) https://fullstack-exampleapp.herokuapp.com/new_note_spa application/json {content: "939436", date: "2020-04-02T09:55:00.228Z"} 
+palvelin->selain: Palvelin vastaa JSON:illa {"message":"note created"}
+
+note over palvelin:
+Palvelin tallentaa noten tietokantaan
+end note
