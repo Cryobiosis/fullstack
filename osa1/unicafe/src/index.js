@@ -8,9 +8,9 @@ const Button = (props) => (
 )
 
 const StatisticLine = (props) =>  (
-  <div>
-    <div>{props.name} {props.value}</div>
-  </div>
+  <tr>
+    <td>{props.name}</td><td>{props.value}{props.suffix}</td>
+  </tr>
 )
 
 const Statistic = ({good, bad, neutral}) =>  {
@@ -22,12 +22,16 @@ const Statistic = ({good, bad, neutral}) =>  {
   if (good > 0 || bad > 0 || neutral > 0)
     return (
       <div>
-      <StatisticLine value={good} name="good"/>
-      <StatisticLine value={neutral} name="neutral"/>
-      <StatisticLine value={bad} name="bad"/>
-      <StatisticLine value={all} name="all"/>
-      <StatisticLine value={avg} name="average"/>
-      <StatisticLine value={good / all * 100} name="positive"/> %
+        <table>
+          <tbody>
+        <StatisticLine value={good} name="good"/>
+        <StatisticLine value={neutral} name="neutral"/>
+        <StatisticLine value={bad} name="bad"/>
+        <StatisticLine value={all} name="all"/>
+        <StatisticLine value={avg} name="average"/>
+        <StatisticLine value={good / all * 100} name="positive" suffix=" %"/>
+        </tbody>
+      </table>
       </div>)
     else 
       return <div>No feedback given</div>
