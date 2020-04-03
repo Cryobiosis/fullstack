@@ -19,15 +19,18 @@ const Statistic = ({good, bad, neutral}) =>  {
   // Good 1, neutral 0, bad -1
   let avg = ((1 * good) + (-1 * bad)) / all
 
-  return (
-    <div>
-    <Display value={good} name="good"/>
-    <Display value={neutral} name="neutral"/>
-    <Display value={bad} name="bad"/>
-    <Display value={all} name="all"/>
-    <Display value={avg} name="average"/>
-    <Display value={good / all * 100} name="positive"/> %
-    </div>)
+  if (good > 0 || bad > 0 || neutral > 0)
+    return (
+      <div>
+      <Display value={good} name="good"/>
+      <Display value={neutral} name="neutral"/>
+      <Display value={bad} name="bad"/>
+      <Display value={all} name="all"/>
+      <Display value={avg} name="average"/>
+      <Display value={good / all * 100} name="positive"/> %
+      </div>)
+    else 
+      return <div>No feedback given</div>
 }
 
 const App = () => {
