@@ -32,14 +32,27 @@ const App = (props) => {
     setVotes(copy)  
   }
 
+  let best = '';
+  // https://www.jstips.co/en/javascript/calculate-the-max-min-value-from-an-array/
+  let maxVote = Math.max.apply(null, votes)
+  // Search position on array
+  let voteID = votes.indexOf(maxVote);
+
+  // Ugly code.. no need to optimize
+  if (maxVote > 0 && voteID != undefined)
+    best = props.anecdotes[voteID]
+
   return (
     <div>
+      <h2>Anecdote of the day</h2>
       <p>{props.anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <div>
         <Button text="next anecdote" handleClick={handleNextClick}/>
         <Button text="vote" vote={selected} handleClick={handleVoteClick}/>
       </div>
+      <h2>Anecdote with most votes</h2>
+        {best}
     </div>
   )
 }
