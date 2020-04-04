@@ -17,6 +17,7 @@ const Statistic = ({good, bad, neutral}) =>  {
 
   let all = bad + good + neutral
   // Good 1, neutral 0, bad -1
+  // TODO: Optimize
   let avg = ((1 * good) + (-1 * bad)) / all
 
   if (good > 0 || bad > 0 || neutral > 0)
