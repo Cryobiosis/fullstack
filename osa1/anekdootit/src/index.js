@@ -10,16 +10,35 @@ const Button = (props) => (
 const App = (props) => {
   const [selected, setSelected] = useState(0)
   
-  const handleNextClick = () => {  
+  // Is it good to use let?
+  let [votes, setVotes] = useState(0)
+  // Init array, if not initialized
+  // https://stackoverflow.com/questions/1295584/most-efficient-way-to-create-a-zero-filled-javascript-array
+  if (votes.length != anecdotes.length)
+    votes = new Array(props.anecdotes.length).fill(0);
+  // console.log("Votes: ", votes)
+
+   const handleNextClick = () => {  
     // console.log(Math.floor(Math.random() * props.anecdotes.length))
     setSelected(Math.floor(Math.random() * props.anecdotes.length))  
   }
 
+  const handleVoteClick = () => {  
+    // console.log('Vote', selected)
+    const copy = [...votes]
+    // kasvatetaan taulukon paikan vote arvoa yhdellä
+    copy[selected] += 1
+    // console.log(copy)
+    setVotes(copy)  
+  }
+
   return (
     <div>
-      {props.anecdotes[selected]}
+      <p>{props.anecdotes[selected]}</p>
+      <p>has {votes[selected]} votes</p>
       <div>
         <Button text="next anecdote" handleClick={handleNextClick}/>
+        <Button text="vote" vote={selected} handleClick={handleVoteClick}/>
       </div>
     </div>
   )
