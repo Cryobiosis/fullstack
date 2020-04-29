@@ -22,7 +22,7 @@ const App = (props) => {
     // console.log(Math.floor(Math.random() * props.anecdotes.length))
     setSelected(Math.floor(Math.random() * props.anecdotes.length))  
   }
-
+  
   const handleVoteClick = () => {  
     // console.log('Vote', selected)
     const copy = [...votes]
