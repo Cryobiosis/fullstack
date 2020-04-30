@@ -3,10 +3,7 @@ import ReactDOM from 'react-dom'
 // import Course from './components/Course'
 
 const Total = (props) => {
-  console.log(props.parts);
-  var total = props.parts.reduce( (a, b) => {
-     // a + b.exercises; 
-     // console.log(b.exercises);
+  const total = props.parts.reduce( (a, b) => {
      return a + b.exercises; 
   }, 0);
 
