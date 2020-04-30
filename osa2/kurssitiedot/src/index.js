@@ -3,9 +3,18 @@ import ReactDOM from 'react-dom'
 // import Course from './components/Course'
 
 const Total = (props) => {
+  console.log(props.parts);
+  var total = props.parts.reduce( (a, b) => {
+     // a + b.exercises; 
+     // console.log(b.exercises);
+     return a + b.exercises; 
+  }, 0);
+
   return (
     <div>
-     <p>Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}</p>
+     <b>
+       Total of exercises {total}
+       </b>
     </div>
   )
 }
@@ -18,7 +27,7 @@ const Header = ({name}) => {
 }
 
 const Part = (props) => {
-  console.log(props);
+  // console.log(props);
   return (
   <p>{props.part.name} {props.part.exercises}</p>
   )
@@ -28,10 +37,10 @@ const Content = ({parts}) => {
 }
 
 const Course = ({ course }) => {
-  console.log(course.name);
   return (<div>
     <Header name={course.name}/>
     <Content parts={course.parts}/> 
+    <Total parts={course.parts}/> 
   </div>
   )
 }
