@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 
-
 const Number = (props) => {
   //console.log(name)
   return (
-    <li>{props.person.name}</li>
+    <li>{props.person.name} {props.person.number}</li>
   )
 }
 
@@ -13,6 +12,7 @@ const App = () => {
     { name: 'Arto Hellas' }
   ]) 
   const [ newName, setNewName ] = useState('')
+  const [ newNumber, setNewNumber ] = useState('')
 
   const addNum = (event) => {
     event.preventDefault()
@@ -26,19 +26,23 @@ const App = () => {
       //console.log('button clicked', event.target)
       const numObject = {
         name: newName,
+        number: newNumber,
         date: new Date().toISOString(),
         id: persons.length + 1,
       }
-      console.log(numObject)
+      // console.log(numObject)
       setPersons(persons.concat(numObject))
       setNewName('')
     }
   }
-  const handleNumChange = (event) => {
+  const handleNameChange = (event) => {
     // console.log(event.target.value)
     setNewName(event.target.value)
-   }
-
+  }
+  const handleNumChange = (event) => {
+    // console.log(event.target.value)
+    setNewNumber(event.target.value)
+  }
 
   return (
     <div>
@@ -46,7 +50,11 @@ const App = () => {
       <form onSubmit={addNum}>
         <div>
           name:
-          <input type="text" name="name" value={newName} onChange={handleNumChange}/>
+          <input type="text" name="name" value={newName} onChange={handleNameChange}/>
+        </div>
+        <div>
+          number:
+          <input type="text" name="number" value={newNumber} onChange={handleNumChange}/>
         </div>
         <div>
           <button type="submit">add</button>
