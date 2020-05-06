@@ -16,20 +16,29 @@ const App = () => {
 
   const addNum = (event) => {
     event.preventDefault()
-    //console.log('button clicked', event.target)
-    const numObject = {
-      name: newName,
-      date: new Date().toISOString(),
-      id: persons.length + 1,
+   
+    // Map persons to array
+    const personTmp = persons.map(person => person.name);
+    // NOTE: Why not use directly reduce and check this?
+    if (personTmp.indexOf(newName) > 0) {
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      //console.log('button clicked', event.target)
+      const numObject = {
+        name: newName,
+        date: new Date().toISOString(),
+        id: persons.length + 1,
+      }
+      console.log(numObject)
+      setPersons(persons.concat(numObject))
+      setNewName('')
     }
-    console.log(numObject)
-    setPersons(persons.concat(numObject))
-    setNewName('')
   }
   const handleNumChange = (event) => {
-    console.log(event.target.value)
+    // console.log(event.target.value)
     setNewName(event.target.value)
    }
+
 
   return (
     <div>
@@ -46,7 +55,7 @@ const App = () => {
       <h2>Numbers</h2>
         <ul>
           {persons.map((person, i) => 
-            <Number key={i} person={person} />
+            <Number key={person.name} person={person} />
           )}
         </ul>
     </div>
