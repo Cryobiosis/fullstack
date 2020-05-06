@@ -9,7 +9,6 @@ const Person = (props) => {
 const Persons = (props) => {
     return (
         <div>
-            <h2>Numbers</h2>
             <ul>
             {props.persons.map((person, i) => 
                 <Person key={person.name} person={person} />
