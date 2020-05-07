@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+// import axios from 'axios'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
-// import phoneService from './services/phone'
+import personService from './services/Person'
 
 const App = () => {
 
@@ -23,11 +23,10 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(personsInit => {
+          setPersons(personsInit)
       })
   }, [])
   // [] Render also 1st time
@@ -48,15 +47,12 @@ const App = () => {
         date: new Date().toISOString(),
         // id: persons.length + 1,
       }
-
-      axios
-        .post('http://localhost:3001/persons', numObject)
-        .then(response => {
-          setPersons(persons.concat(response.data))
-          // setNotes(notes.concat(response.data))    
-          // setNewNote('')   
-        })
-
+      personService
+        .create(numObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+      })
+     
       // console.log(numObject)
       // setPersons(persons.concat(numObject))
       setNewName('')
