@@ -2,6 +2,48 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Filter from './components/Filter'
 
+// https://www.metaweather.com/api/#location doesnt work, CORS policy not set...
+// https://api.met.no/weatherapi/locationforecast/1.9/documentation#!/data/get_format
+const Weather = ({country}) => {
+  const [weather, setWeather] = useState([])
+
+  let temperature
+  let wind
+  let windDir
+
+  // const api_key = process.env.REACT_APP_API_KEY
+
+  useEffect(() => {
+    console.log('effect')
+
+    // No API key required
+    // Whole country? not capital?
+    const url ='https://api.met.no/weatherapi/locationforecast/1.9/.json?lat='+country.latlng[0]+'&lon='+country.latlng[1]
+    console.log(url) 
+    axios
+      .get(url)
+      .then(response => {
+        // console.log('RESPONSE:', response.data)
+        setWeather(response.data)
+      })
+  }, []) // execure only in 1st render
+
+  // console.log('WEATHER',weather)
+  if (weather.product) {
+    temperature = weather.product.time[0].location.temperature.value
+    wind        = weather.product.time[0].location.windSpeed.mps;
+    windDir     = weather.product.time[0].location.windDirection.name;
+  }
+
+  return (
+    <div>
+      <h2>Weather in {country.name}</h2>
+      <p>temperature {temperature} Celcius</p>
+      <p>wind {wind} {windDir}</p>
+    </div>
+  )
+}
+
 const Country = (props) => {
   // NOTE: onClick must have () =>
   return (
@@ -24,6 +66,9 @@ const CountryFull = ({country}) => {
         )}
       </ul>
       <img src={country.flag} alt={country.name} height='100px'/>
+
+      <Weather country={country}/>
+          
     </div>
   )
 }
@@ -53,6 +98,7 @@ const App = () => {
     setFilter(value)
   }
 
+  // Get countriest JSON
   useEffect(() => {
     console.log('effect')
     axios
@@ -71,7 +117,7 @@ const App = () => {
     countriesToShow = countries.filter(country => country.name.toLowerCase().includes(useFilter.toLowerCase()))
   }
 
-  let tooLong = ''
+    let tooLong = ''
   if (countriesToShow.length > 10) 
     tooLong = `Too many matches, specify another filter`;
 
