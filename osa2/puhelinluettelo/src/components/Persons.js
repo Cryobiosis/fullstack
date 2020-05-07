@@ -1,8 +1,11 @@
 import React from 'react'
 
-const Person = (props) => {
+const Person = ({person, deleteCallback}) => {
     return (
-      <li>{props.person.name} {props.person.number}</li>
+        <li>
+            {person.name} {person.number} 
+            <button onClick={() => deleteCallback(person)}>delete</button>
+        </li>
     )
 }
 
@@ -11,7 +14,7 @@ const Persons = (props) => {
         <div>
             <ul>
             {props.persons.map((person, i) => 
-                <Person key={person.name} person={person} />
+                <Person key={person.name} person={person} deleteCallback={props.deleteCallback} />
             )}
             </ul>
         </div>
