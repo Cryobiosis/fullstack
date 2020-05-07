@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
-// import axios from 'axios'
-import Persons from './components/Persons'
-import PersonForm from './components/PersonForm'
-import Filter from './components/Filter'
-import personService from './services/PersonService'
+import Persons        from './components/Persons'
+import PersonForm     from './components/PersonForm'
+import Filter         from './components/Filter'
+import Notification   from './components/Notification'
+import personService  from './services/PersonService'
+
+import './index.css'
 
 const App = () => {
 
@@ -17,9 +19,11 @@ const App = () => {
   const handleNumChange = (event) => {
     setNewNumber(event.target.value)
   }
-  const [persons, setPersons]       = useState([])
-  const [ newName, setNewName ]     = useState('')
-  const [ newNumber, setNewNumber ] = useState('')
+  const [persons, setPersons]           = useState([])
+  const [newName, setNewName]           = useState('')
+  const [newNumber, setNewNumber]       = useState('')
+  const [infoMessage, setInfoMessage]   = useState(null)
+  // const [errorMessage, setErrorMessage] = useState('some error happened...')
 
   // Get all persons
   useEffect(() => {
@@ -59,8 +63,12 @@ const App = () => {
             // Remove old one and add new 
             setPersons(persons
                         .filter(tmp => tmp.id !== person.id)
-                        .concat(returnedPerson)
-            )
+                        .concat(returnedPerson))
+
+            setInfoMessage(`Updated ${newName}`)
+            setTimeout(() => {
+              setInfoMessage(null)
+            }, 5000)
         })
       } 
     } else {
@@ -76,6 +84,12 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
       })
+      
+      setInfoMessage(`Added ${newName}`)
+        setTimeout(() => {
+          setInfoMessage(null)
+        }, 5000)
+
     }
     setNewName('')
     setNewNumber('')
@@ -85,7 +99,7 @@ const App = () => {
   
   // Delete person from server and update GUI
   const deleteCallback = (person) => {
-    console.log("delete", person.id)
+    // console.log("delete", person.id)
     
     if (window.confirm(`Delete ${person.name} ?`)) { 
       personService
@@ -93,6 +107,11 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.filter(tmp => tmp.id !== person.id))
           //console.log(persons.filter(person => person.id !== id))
+          setInfoMessage(`Removed ${person.name}`)
+          setTimeout(() => {
+            setInfoMessage(null)
+          }, 5000)
+  
         })
         .catch(error => {
           alert(
@@ -106,6 +125,9 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={infoMessage}/>
+
       <Filter name={useFilter} callback={handleFilterChange} />
 
       <h3>Add a new</h3>
