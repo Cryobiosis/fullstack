@@ -48,12 +48,7 @@ const App = () => {
     if (person) {
       // NOTE: Really this check should be on done on server
       if (window.confirm(`${newName} is already added to phonebook, replace old number with new one?`)) {
-        const numObject = {
-          name:   newName,
-          number: newNumber,
-          date:   new Date().toISOString(),
-          id:     persons.id,
-        }
+        const numObject = {...person, number: newNumber}
         personService
           .update(person.id, numObject)
           .then(returnedPerson => {
