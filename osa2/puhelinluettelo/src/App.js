@@ -23,7 +23,7 @@ const App = () => {
   const [newName, setNewName]           = useState('')
   const [newNumber, setNewNumber]       = useState('')
   const [infoMessage, setInfoMessage]   = useState(null)
-  // const [errorMessage, setErrorMessage] = useState('some error happened...')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   // Get all persons
   useEffect(() => {
@@ -69,10 +69,15 @@ const App = () => {
             setTimeout(() => {
               setInfoMessage(null)
             }, 5000)
+        }).catch(error => {
+          setErrorMessage(`the person '${person.name}' not found from server`)
+          setTimeout(() => {
+            setInfoMessage(null)
+          }, 5000) 
         })
+
       } 
     } else {
-      //console.log('button clicked', event.target)
       const numObject = {
         name:   newName,
         number: newNumber,
@@ -114,10 +119,10 @@ const App = () => {
   
         })
         .catch(error => {
-          alert(
-            `the person '${person.name}' was already deleted from server`
-          )
-          // setNotes(notes.filter(n => n.id !== id))     
+          setErrorMessage(`the person '${person.name}' was already deleted from server`)
+          setTimeout(() => {
+            setInfoMessage(null)
+          }, 5000) 
         })
     }
   }
@@ -126,7 +131,8 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
-      <Notification message={infoMessage}/>
+      <Notification message={infoMessage} type='info'/>
+      <Notification message={errorMessage} type='error'/>
 
       <Filter name={useFilter} callback={handleFilterChange} />
 
