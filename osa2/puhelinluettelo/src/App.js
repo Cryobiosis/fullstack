@@ -36,17 +36,39 @@ const App = () => {
   const addNum = (event) => {
     event.preventDefault()
    
-    // Map persons to array
-    const personTmp = persons.map(person => person.name);
-    // NOTE: Why not use directly reduce and check this?
-    if (personTmp.indexOf(newName) > 0) {
-      alert(`${newName} is already added to phonebook`)
+    // Use filter to search person by name
+    const filter = persons.filter(tmp => tmp.name === newName)
+    // Get person object from array
+    let person
+    if (filter.length > 0) person = filter[0]
+
+    // Check is name already in phonebook
+    if (person) {
+      // alert(`${newName} is already added to phonebook`)
+      // TODO: Really this check should be on done on server
+      if (window.confirm(`${newName} is already added to phonebook, replace old number with new one?`)) {
+        const numObject = {
+          name:   newName,
+          number: newNumber,
+          date:   new Date().toISOString(),
+          id:     persons.id,
+        }
+        personService
+          .update(person.id, numObject)
+          .then(returnedPerson => {
+            // Remove old one and add new 
+            setPersons(persons
+                        .filter(tmp => tmp.id !== person.id)
+                        .concat(returnedPerson)
+            )
+        })
+      } 
     } else {
       //console.log('button clicked', event.target)
       const numObject = {
-        name: newName,
+        name:   newName,
         number: newNumber,
-        date: new Date().toISOString(),
+        date:   new Date().toISOString(),
         // id: persons.length + 1,
       }
       personService
@@ -54,12 +76,9 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
       })
-     
-      // console.log(numObject)
-      // setPersons(persons.concat(numObject))
-      setNewName('')
-      setNewNumber('')
     }
+    setNewName('')
+    setNewNumber('')
   }
 
   const personsToShow = useFilter ? persons.filter(person => person.name.includes(useFilter)) : persons
