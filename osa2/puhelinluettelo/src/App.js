@@ -25,16 +25,14 @@ const App = () => {
   const [infoMessage, setInfoMessage]   = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
-  // Get all persons
+  // Get all persons, get only in first render thus [] as second arg.
   useEffect(() => {
-    // console.log('effect')
     personService
       .getAll()
       .then(personsInit => {
           setPersons(personsInit)
       })
   }, [])
-  // [] Render also 1st time
 
   // Add number
   const addNum = (event) => {
@@ -46,10 +44,9 @@ const App = () => {
     let person
     if (filter.length > 0) person = filter[0]
 
-    // Check is name already in phonebook
+    // If name is already in phonebook then update
     if (person) {
-      // alert(`${newName} is already added to phonebook`)
-      // TODO: Really this check should be on done on server
+      // NOTE: Really this check should be on done on server
       if (window.confirm(`${newName} is already added to phonebook, replace old number with new one?`)) {
         const numObject = {
           name:   newName,
@@ -60,7 +57,7 @@ const App = () => {
         personService
           .update(person.id, numObject)
           .then(returnedPerson => {
-            // Remove old one and add new 
+            // Remove old one and add new in local array
             setPersons(persons
                         .filter(tmp => tmp.id !== person.id)
                         .concat(returnedPerson))
@@ -75,7 +72,6 @@ const App = () => {
             setInfoMessage(null)
           }, 5000) 
         })
-
       } 
     } else {
       const numObject = {
@@ -84,6 +80,7 @@ const App = () => {
         date:   new Date().toISOString(),
         // id: persons.length + 1,
       }
+      // Create new object with POST
       personService
         .create(numObject)
         .then(returnedPerson => {
@@ -96,15 +93,13 @@ const App = () => {
         }, 5000)
 
     }
+    // Reset always user input fields
     setNewName('')
     setNewNumber('')
   }
 
-  const personsToShow = useFilter ? persons.filter(person => person.name.includes(useFilter)) : persons
-  
   // Delete person from server and update GUI
   const deleteCallback = (person) => {
-    // console.log("delete", person.id)
     
     if (window.confirm(`Delete ${person.name} ?`)) { 
       personService
@@ -127,11 +122,14 @@ const App = () => {
     }
   }
 
+  // Use filter to limit persons
+  const personsToShow = useFilter ? persons.filter(person => person.name.includes(useFilter)) : persons
+
   return (
     <div>
       <h2>Phonebook</h2>
 
-      <Notification message={infoMessage} type='info'/>
+      <Notification message={infoMessage}  type='info'/>
       <Notification message={errorMessage} type='error'/>
 
       <Filter name={useFilter} callback={handleFilterChange} />
@@ -153,7 +151,6 @@ const App = () => {
 
     </div>
   )
-
 }
 
 export default App
