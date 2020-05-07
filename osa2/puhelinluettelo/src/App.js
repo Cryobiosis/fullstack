@@ -3,6 +3,7 @@ import axios from 'axios'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+// import phoneService from './services/phone'
 
 const App = () => {
 
@@ -45,10 +46,19 @@ const App = () => {
         name: newName,
         number: newNumber,
         date: new Date().toISOString(),
-        id: persons.length + 1,
+        // id: persons.length + 1,
       }
+
+      axios
+        .post('http://localhost:3001/persons', numObject)
+        .then(response => {
+          setPersons(persons.concat(response.data))
+          // setNotes(notes.concat(response.data))    
+          // setNewNote('')   
+        })
+
       // console.log(numObject)
-      setPersons(persons.concat(numObject))
+      // setPersons(persons.concat(numObject))
       setNewName('')
       setNewNumber('')
     }
