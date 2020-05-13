@@ -80,12 +80,18 @@ const App = () => {
         .create(numObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
-      })
-      
-      setInfoMessage(`Added ${newName}`)
+          setInfoMessage(`Added ${newName}`)
+          setTimeout(() => {
+            setInfoMessage(null)
+          }, 5000) 
+      }).catch(error => {
+        setErrorMessage(`the person '${numObject.name}' can't be created`)
         setTimeout(() => {
           setInfoMessage(null)
-        }, 5000)
+        }, 5000) 
+      })
+      
+     
 
     }
     // Reset always user input fields
