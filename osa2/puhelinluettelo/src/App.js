@@ -62,9 +62,9 @@ const App = () => {
               setInfoMessage(null)
             }, 5000)
         }).catch(error => {
-          setErrorMessage(`the person '${person.name}' not found from server`)
+          setErrorMessage(`the person '${person.name}' can't be updated. Error: ${error.response.data.error}`)
           setTimeout(() => {
-            setInfoMessage(null)
+            setErrorMessage(null)
           }, 5000) 
         })
       } 
@@ -85,14 +85,11 @@ const App = () => {
             setInfoMessage(null)
           }, 5000) 
       }).catch(error => {
-        setErrorMessage(`the person '${numObject.name}' can't be created`)
+        setErrorMessage(`the person '${numObject.name}' can't be created. Error: ${error.response.data.error}`)
         setTimeout(() => {
-          setInfoMessage(null)
+          setErrorMessage(null)
         }, 5000) 
       })
-      
-     
-
     }
     // Reset always user input fields
     setNewName('')
@@ -117,7 +114,7 @@ const App = () => {
         .catch(error => {
           setErrorMessage(`the person '${person.name}' was already deleted from server`)
           setTimeout(() => {
-            setInfoMessage(null)
+            setErrorMessage(null)
           }, 5000) 
         })
     }
