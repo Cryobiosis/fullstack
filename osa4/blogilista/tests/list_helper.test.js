@@ -21,3 +21,20 @@ describe('total likes', () => {
     expect(result).toBe(36)
   })
 })
+
+describe('favorite Blog', () => {
+  test('of empty list is zero', () => {
+    const result = listHelper.favoriteBlog([])
+    expect(result).toBe('')
+  })
+  test('when list has only one blog equals the like os that', () => {
+    const result = listHelper.favoriteBlog(blogs)
+    const best = { title: "Canonical string reduction", author: "Edsger W. Dijkstra", likes: 12 }
+    expect(result).toEqual(best)
+  })
+  test('when list has only one blog equals the like os that', () => {
+    const result = listHelper.favoriteBlog(blogs)
+    const best = { title: "Canonical string reduction", author: "Edsger W. Dijkstra", likes: 12 }
+    expect(result).toEqual(best)
+  })
+})
