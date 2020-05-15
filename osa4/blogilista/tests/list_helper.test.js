@@ -30,12 +30,29 @@ describe('favorite Blog', () => {
   })
   test('when list has only one blog equals the like os that', () => {
     const result = listHelper.favoriteBlog(one)
-    const best = { title: "React patterns", author: "Michael Chan", likes: 7 }
+    const best = { title: 'React patterns', author: 'Michael Chan', likes: 7 }
     expect(result).toEqual(best)
   })
   test('of a bigger list is calculated right', () => {
     const result = listHelper.favoriteBlog(blogs)
-    const best = { title: "Canonical string reduction", author: "Edsger W. Dijkstra", likes: 12 }
+    const best = { title: 'Canonical string reduction', author: 'Edsger W. Dijkstra', likes: 12 }
+    expect(result).toEqual(best)
+  })
+})
+
+describe('Most Blogs', () => {
+  test('of empty list is zero', () => {
+    const result = listHelper.mostBlogs([])
+    expect(result).toBe(undefined)
+  })
+  test('when list has only one blog equals the like os that', () => {
+    const result = listHelper.mostBlogs(one)
+    const best = { author: 'Michael Chan', blogs: 1 }
+    expect(result).toEqual(best)
+  })
+  test('of a bigger list is calculated right', () => {
+    const result = listHelper.mostBlogs(blogs)
+    const best = { author: 'Robert C. Martin', blogs: 3 }
     expect(result).toEqual(best)
   })
 })

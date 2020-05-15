@@ -33,8 +33,54 @@ const favoriteBlog = (blogs) => {
   }
 }
 
+const mostBlogs = (blogs) => {
+  // console.log(blogs)
+  if (blogs.length <= 0) return
+  // console.log(blogs)
+
+  // console.log(_.maxBy(blogs, 'author'));
+  const _ = require('lodash')
+
+  function author(blog) {
+    return [blog.author]
+  }
+
+  const authors = _.flatMap(blogs, author)
+  //const authors = _(blogs).groupBy("author")
+  //const _.(authors).groupBy('nestedA.nestedB.id').size()
+
+  // console.log('authors', authors)
+
+  // TODO: There has to be better way to count values from array!!!???!?
+
+  let author2 = ''
+  let count = 0
+  let maxCount = 0;
+  let authorMap = []
+
+  _.forEach(authors, function(value) {
+    // console.log(value)
+    if (!authorMap[value]) authorMap[value] = 1
+    else authorMap[value]++
+
+    // Save author name and count
+    if (authorMap[value] > maxCount) {
+      author2 = value
+      count = authorMap[value]++
+      maxCount++
+    }
+
+  })
+
+  // console.log(_.maxBy(foo, function(o) { console.log(o); return o }))
+  //console.log('count', _.countBy(authors, key))
+
+  return { 'author': author2, 'blogs': count }
+}
+
 module.exports = {
   dummy,
   favoriteBlog,
+  mostBlogs,
   totalLikes
 }
