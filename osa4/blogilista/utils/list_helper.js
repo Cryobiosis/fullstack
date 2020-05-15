@@ -78,9 +78,54 @@ const mostBlogs = (blogs) => {
   return { 'author': author2, 'blogs': count }
 }
 
+const mostLikes = (blogs) => {
+  // console.log(blogs)
+  if (blogs.length <= 0) return
+  const _ = require('lodash')
+
+  function author(blog) {
+    return [blog.author]
+  }
+
+
+  const authors = _.flatMap(blogs, author)
+  //console.log(authors)
+
+  // TODO: There has to be better way to count values from array!!!???!?
+
+  let author2 = ''
+  let count = 0
+  let maxLikes = 0;
+  let likes = 0;
+
+  let authorMap = []
+
+  _.forEach(authors, function(value) {
+    //console.log(value)
+
+    // Filter one author blogs
+    aut = _.filter(blogs, { 'author': value })
+    // Sum all likes
+    likes = _.sumBy(aut, 'likes')
+    // console.log('Likes', likes, value)
+    // Store likes only once!
+    if (!authorMap[value]) authorMap[value] = likes
+
+    // Save author name and count
+    if (authorMap[value] > maxLikes) {
+      author2 = value
+      count = likes
+      maxLikes = likes
+    }
+    // console.log('max', )
+  })
+
+  return { 'author': author2, 'likes': count }
+}
 module.exports = {
   dummy,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
   totalLikes
 }
