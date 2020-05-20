@@ -11,7 +11,6 @@ describe('total likes', () => {
     expect(result).toBe(0)
   })
 
-
   test('when list has only one blog equals the like os that', () => {
     const result = listHelper.totalLikes(one)
     expect(result).toBe(one[0].likes)
