@@ -88,7 +88,26 @@ test('New blog with POST', async () => {
 
     //done()
     })
+})
 
+
+test('New blog post likes is 0', async () => {
+
+  const formData = {
+    title: 'test',
+    author: 'John Doe',
+    //likes: 25,
+    url: 'http://localhost/'
+  }
+
+  // POST new blog
+  await api.post('/api/blogs')
+    .send(formData)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+    .expect(response => {
+      expect(response.body.likes).toEqual(0)
+    })
 })
 
 afterAll(() => {

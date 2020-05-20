@@ -21,6 +21,10 @@ blogsRouter.post('/', async (request, response) => {
     .then(result => {
       response.status(201).json(result)
     })*/
+
+  // Set likes to 0 if missing
+  if (!request.body.likes) request.body.likes = 0
+
   const blog = new Blog(request.body)
   const savedBlog = await blog.save()
   // user.notes = user.notes.concat(savedNote._id)
