@@ -110,6 +110,36 @@ test('New blog post likes is 0', async () => {
     })
 })
 
+test('Blog post without title', async () => {
+
+  const formData = {
+    // title: 'test',
+    author: 'John Doe',
+    //likes: 25,
+    url: 'http://localhost/'
+  }
+
+  // POST new blog
+  await api.post('/api/blogs')
+    .send(formData)
+    .expect(400)
+})
+
+test('Blog post without url', async () => {
+
+  const formData = {
+    // title: 'test',
+    author: 'John Doe',
+    //likes: 25,
+    url: 'http://localhost/'
+  }
+
+  // POST new blog
+  await api.post('/api/blogs')
+    .send(formData)
+    .expect(400)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })

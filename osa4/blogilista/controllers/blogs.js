@@ -25,6 +25,18 @@ blogsRouter.post('/', async (request, response) => {
   // Set likes to 0 if missing
   if (!request.body.likes) request.body.likes = 0
 
+  // Title and URL required, with error message
+  if (!request.body.title || request.body.title.length === 0) {
+    return response.status(400).json({
+      error: 'title missing'
+    })
+  }
+  if (!request.body.url || request.body.url.length === 0) {
+    return response.status(400).json({
+      error: 'url missing'
+    })
+  }
+
   const blog = new Blog(request.body)
   const savedBlog = await blog.save()
   // user.notes = user.notes.concat(savedNote._id)
