@@ -140,15 +140,27 @@ test('Blog post without url', async () => {
     .expect(400)
 })
 
-afterAll(() => {
-  mongoose.connection.close()
-})
-
 test('Delete blog post', async () => {
 
   // POST new blog
   await api.delete('/api/blogs/5a422a851b54a676234d17f7')
     .expect(204)
+})
+
+test('Update post likes', async () => {
+  const formData = {
+    // title: 'test',
+    // author: 'John Doe',
+    likes: 10,
+    //url: 'http://localhost/'
+  }
+  // POST new blog
+  await api.put('/api/blogs/5a422aa71b54a676234d17f8')
+    .send(formData)
+    .expect(201)
+    .expect(response => {
+      expect(response.body.likes).toEqual(10)
+    })
 })
 
 afterAll(() => {

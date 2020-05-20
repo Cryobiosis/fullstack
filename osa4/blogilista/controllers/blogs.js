@@ -40,7 +40,7 @@ blogsRouter.post('/', async (request, response) => {
   const blog = new Blog(request.body)
   const savedBlog = await blog.save()
   // user.notes = user.notes.concat(savedNote._id)
-  await blog.save()
+  // await blog.save()
   response.status(201)
   response.json(savedBlog.toJSON())
 })
@@ -48,6 +48,20 @@ blogsRouter.post('/', async (request, response) => {
 blogsRouter.delete('/:id', async (request, response) => {
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
+})
+
+// Update blog post
+blogsRouter.put('/:id', async (request, response, next) => {
+
+  const blog = {
+    title: request.body.title,
+    likes: request.body.likes
+  }
+  // TODO: Add rest of options..
+
+  const savedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  response.status(201)
+  response.json(savedBlog.toJSON())
 })
 
 module.exports = blogsRouter
