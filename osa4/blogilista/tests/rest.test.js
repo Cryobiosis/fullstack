@@ -41,7 +41,6 @@ test('blog count match', async () => {
     .get('/api/blogs')
     .expect(response => {
       expect(response.status).toBe(200)
-      // expect(response.body).toEqual({ name: "John Doe" })
       expect(response.body).toHaveLength(2)
     //done()
     })
@@ -56,6 +55,41 @@ test('Blog with id', async () => {
     })
 })
 
+test('New blog with POST', async () => {
+
+  const formData = {
+    title: 'test',
+    author: 'John Doe',
+    likes: 25,
+    url: 'http://localhost/'
+  }
+
+  let count = 0;
+  const before = await api.get('/api/blogs')
+    .expect(response => {
+      expect(response.status).toBe(200)
+      //done()
+      count = response.body.length
+    })
+
+  // POST new blog
+  await api.post('/api/blogs')
+    .send(formData)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  // Get all blog items again, and check last item title
+  const after = await api.get('/api/blogs')
+    .expect(response => {
+      expect(response.status).toBe(200)
+      expect(response.body).toHaveLength(count +1)
+      // Last element of array
+      expect(response.body[response.body.length-1].title).toEqual(formData.title)
+
+    //done()
+    })
+
+})
 
 afterAll(() => {
   mongoose.connection.close()
