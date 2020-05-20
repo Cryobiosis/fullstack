@@ -143,3 +143,14 @@ test('Blog post without url', async () => {
 afterAll(() => {
   mongoose.connection.close()
 })
+
+test('Delete blog post', async () => {
+
+  // POST new blog
+  await api.delete('/api/blogs/5a422a851b54a676234d17f7')
+    .expect(204)
+})
+
+afterAll(() => {
+  mongoose.connection.close()
+})
