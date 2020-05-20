@@ -47,20 +47,15 @@ test('blog count match', async () => {
     })
 })
 
-/*
-test('Blogs with id', () => {
-  const foo = api
-    .get('/api/blogs')
-    //.expect(200)
-    //.expect('Content-Type', /application\/json/)
-    //.expect(foo.body[0][id]).toBeDefined())
-
-  //const contents = foo.body.map(r => r.content)
-  //  .expect(contents).toHaveLength(2)
-
-  console.log(foo.body)
+test('Blog with id', async () => {
+  await api.get('/api/blogs')
+    .expect(response => {
+      expect(response.status).toBe(200)
+      expect(response.body[0].id).toBeDefined()
+    //done()
+    })
 })
-*/
+
 
 afterAll(() => {
   mongoose.connection.close()
