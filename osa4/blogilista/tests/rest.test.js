@@ -172,6 +172,12 @@ describe('Blog posts REST API tests', () => {
     })
   })
 
+  describe('Users', () => {
+    test('Create new user', async () => {
+      
+    })
+  })
+
 })
 
 afterAll(() => {
