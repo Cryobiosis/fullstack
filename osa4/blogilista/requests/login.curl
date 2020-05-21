@@ -1,2 +1,0 @@
-curl -vv -d '{"username": "root2", "password": "salasana"}'  -H 'Content-Type: application/json' http://localhost:3003/api/login
-
