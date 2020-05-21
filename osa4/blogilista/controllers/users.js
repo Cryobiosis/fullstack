@@ -30,6 +30,12 @@ usersRouter.post('/', async (request, response) => {
       error: 'username missing'
     })
   }
+  if (request.body.password.length < 3 || request.body.username.length < 3) {
+    return response.status(400).json({
+      error: 'username and password has to be more than 3 chars'
+    })
+  }
+
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(body.password, saltRounds)
 
