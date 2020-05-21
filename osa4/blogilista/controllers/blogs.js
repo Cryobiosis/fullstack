@@ -41,11 +41,10 @@ blogsRouter.post('/', async (request, response) => {
   // TMP Get fist user
   const users = await User.find({})
   console.log(users)
-  const firstID = users[0]._id;
+  const firstID = users[0]._id
   // response.json(users.map(u => u.toJSON()))
   request.body.user = firstID
 
- 
   const blog = new Blog(request.body)
   const savedBlog = await blog.save()
   // user.notes = user.notes.concat(savedNote._id)
