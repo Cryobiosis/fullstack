@@ -1,2 +1,2 @@
-curl -vv -d '{"title": "sample 2","author": "test 2", "url": "http://localhost/", "likes": "1"}'  -H 'Content-Type: application/json' http://localhost:3003/api/blogs
+curl -vv -d '{"title": "sample 1","author": "test 2", "url": "http://localhost/", "likes": "1"}'  -H 'Content-Type: application/json' http://localhost:3003/api/blogs
 
