@@ -1,22 +1,79 @@
 import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
-import blogService from './services/blogs'
+import Blog           from './components/Blog'
+import Notification   from './components/Notification'
+import blogService    from './services/blogs'
+import loginService   from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  
+  const [infoMessage, setInfoMessage]   = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
+  const [user, setUser] = useState(null)
+
+  const handleLogin = async (event) => {
+    event.preventDefault()
+    try {
+      const user = await loginService.login({
+        username, password,
+      })
+
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      setErrorMessage('wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
   }, [])
+  
+  const loginForm = () => (     
+    <div clas="loginform">
+      <h2> Login </h2>
+      <form onSubmit={handleLogin}>
+        <div>username
+          <input type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)}/>
+        </div>
+        <div>password
+          <input type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)}/>
+        </div>
+        <button type="submit">login</button>
+      </form>
+    </div>
+  )
 
+  const blogsForm = () => (
+    <div class="blogs">
+      <h2>blogs</h2>
+      <p>{user.name} logged in</p>
+        {blogs.map(blog =>
+          <Blog key={blog.id} blog={blog} />
+        )}
+    </div>
+  )
+  
   return (
     <div>
-      <h2>blogs</h2>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
+      <div class="messages">
+        <Notification message={infoMessage}  type='info'/>
+        <Notification message={errorMessage} type='error'/>
+      </div>
+      
+      {user === null ?
+        loginForm() :
+        blogsForm()
+      }
+     
     </div>
   )
 }
