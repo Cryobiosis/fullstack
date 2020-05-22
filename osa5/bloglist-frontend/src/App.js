@@ -4,6 +4,7 @@ import BlogForm       from './components/BlogForm'
 import Notification   from './components/Notification'
 import blogService    from './services/blogs'
 import loginService   from './services/login'
+import './index.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -13,7 +14,6 @@ const App = () => {
   const [title,  setTitle]  = useState('')
   const [author, setAuthor]  = useState('')
   const [url,    setUrl]  = useState('')
-
   
   const [infoMessage, setInfoMessage]   = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
@@ -82,6 +82,8 @@ const App = () => {
         // setPersons(persons.concat(returnedPerson))
         // setInfoMessage(`Added ${newName}`)
         
+        setInfoMessage(`a new blog '${blogPost.title}' added`)
+
         // Reset always user input fields
         setTitle('')
         setAuthor('')
@@ -94,7 +96,7 @@ const App = () => {
           setInfoMessage(null)
         }, 5000) 
     }).catch(error => {
-      setErrorMessage(`the person '${blogPost.name}' can't be created. Error: ${error.response.data.error}`)
+      setErrorMessage(`the blog '${blogPost.title}' can't be created. Error: ${error.response.data.error}`)
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000) 
