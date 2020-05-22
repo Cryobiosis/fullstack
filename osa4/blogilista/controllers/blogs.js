@@ -17,6 +17,9 @@ blogsRouter.get('/', async (request, response) => {
 
 // POST /
 blogsRouter.post('/', async (request, response) => {
+
+  // TODO: Or should data come as JSON object?
+
   /*const blog = new Blog(request.body)
   blog
     .save()

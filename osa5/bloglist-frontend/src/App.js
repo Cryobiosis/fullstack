@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Blog           from './components/Blog'
+import BlogForm       from './components/BlogForm'
 import Notification   from './components/Notification'
 import blogService    from './services/blogs'
 import loginService   from './services/login'
@@ -8,6 +9,11 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  
+  const [title,  setTitle]  = useState('')
+  const [author, setAuthor]  = useState('')
+  const [url,    setUrl]  = useState('')
+
   
   const [infoMessage, setInfoMessage]   = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
@@ -49,6 +55,52 @@ const App = () => {
     // setUser(null)
     // Reload window
     window.location.reload(false);
+  }
+
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value)
+  }
+  const handleAuthorChange = (event) => {
+    setAuthor(event.target.value)
+  }
+  const handleUrlChange = (event) => {
+    setUrl(event.target.value)
+  }
+  const addBlogPost = (event) => {
+    event.preventDefault()
+    console.log("add post")
+
+    const blogPost = {
+      title:  title,
+      author: author,
+      url:    url,
+    }
+    // Create new object with POST
+    blogService
+      .create(blogPost)
+      .then(returnedPerson => {
+        // setPersons(persons.concat(returnedPerson))
+        // setInfoMessage(`Added ${newName}`)
+        
+        // Reset always user input fields
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+        // Reget all blog items from server
+        blogService.getAll().then(blogs =>
+          setBlogs( blogs )
+        )
+        setTimeout(() => {
+          setInfoMessage(null)
+        }, 5000) 
+    }).catch(error => {
+      setErrorMessage(`the person '${blogPost.name}' can't be created. Error: ${error.response.data.error}`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000) 
+    })
+    
+    
   }
 
   // Check login information from local storage on start up
@@ -98,9 +150,14 @@ const App = () => {
       
       {user === null ?
         loginForm() :
-        blogsForm()
+        blogsForm() 
       }
-     
+     <BlogForm
+      onSubmit      = {addBlogPost} 
+      titleOnChange = {handleTitleChange} 
+      authorOnChange= {handleAuthorChange}
+      urlOnChange   = {handleUrlChange}
+     />
     </div>
   )
 }
