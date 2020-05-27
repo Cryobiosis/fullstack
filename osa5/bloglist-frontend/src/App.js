@@ -9,7 +9,11 @@ import loginService   from './services/login'
 import './index.css'
 
 const App = () => {
+
   const [blogs, setBlogs] = useState([])
+  // https://flaviocopes.com/how-to-sort-array-of-objects-by-property-javascript/
+  blogs.sort((a, b) => (a.likes > b.likes) ? -1 : 1)
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
    
