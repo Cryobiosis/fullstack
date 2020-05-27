@@ -1,11 +1,10 @@
 import React, {useState} from 'react'
-import Togglable from '../components/Togglable'
+// import Togglable from '../components/Togglable'
 
-const Blog = ({ blog }) =>  {
+const Blog = ({ blog, updateBlogPost}) =>  {
 
   const [full, setShowFull] = useState(false)
 
-  const blogRef = React.createRef()
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -13,7 +12,27 @@ const Blog = ({ blog }) =>  {
     borderWidth: 1,
     marginBottom: 5
   }
-  
+  const addLike = (event) => {
+    //event.preventDefault()
+    const blogPost = {
+      id:     blog.id,
+      title:  blog.title,
+      author: blog.author,
+      url:    blog.url,
+      likes:  blog.likes +1,
+      user:   blog.user.id,
+    }
+    //console.log(blogPost)
+    // const copy = [...blog]
+    // copy.likes++;
+    // console.log(copy)
+    //console.log(blog);
+
+    updateBlogPost(blogPost, blog.id)
+
+    // console.log('addlike')
+  }
+
   return (
   <div style={blogStyle}>
     {blog.title}
@@ -25,9 +44,8 @@ const Blog = ({ blog }) =>  {
       <div>
         <p>{blog.author}</p>
         <p>{blog.url}</p>
-        <div>likes TODO: <button onClick={() => console.log('TODO: like')} type="submit">like</button></div>
+        <div>likes {blog.likes} <button onClick={() => addLike()} type="submit">like</button></div>
         <button onClick={() => setShowFull(false)} type="submit">hide</button>
-
       </div>
     }
 

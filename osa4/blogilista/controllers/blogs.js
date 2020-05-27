@@ -103,14 +103,28 @@ blogsRouter.delete('/:id', async (request, response) => {
 
 // Update blog post
 blogsRouter.put('/:id', async (request, response) => {
+/*  // Get user
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+  if (!request.token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+  const user = await User.findById(decodedToken.id)*/
+
+  // FIXME: Security problem, PUT can change blog post user
+  //console.log('id:'+request.params.id)
 
   const blog = {
-    title: request.body.title,
-    likes: request.body.likes
+    //id:     request.params.id,
+    title:  request.body.title,
+    author: request.body.author,
+    url:    request.body.url,
+    likes:  request.body.likes,
+    user:   request.body.user // user._id
   }
-  // TODO: Add rest of options..
 
-  const savedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
+  //console.log(blog)
+
+  const savedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { useFindAndModify:false, new: false })
   response.status(201)
   response.json(savedBlog.toJSON())
 })

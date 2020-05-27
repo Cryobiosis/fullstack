@@ -105,6 +105,29 @@ const App = () => {
     })
   }
 
+  const updateBlogPost = (blogPost, id) => {
+    blogService
+    .update(blogPost, id)
+    .then(returnedPerson => {
+      setInfoMessage(`blog post '${blogPost.title}' updated`)
+      
+      // Reget all blog items from server
+      blogService.getAll().then(blogs =>
+        setBlogs( blogs )
+      )
+      setTimeout(() => {
+        setInfoMessage(null)
+      }, 5000) 
+    }).catch(error => {
+      console.log(error)
+      setErrorMessage(`the blog '${blogPost.title}' can't be updated. Error: ${error.response.data.error}`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000) 
+    })
+    console.log('update')
+  }
+
   // Check login information from local storage on start up
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
@@ -117,10 +140,10 @@ const App = () => {
     }  
   }, [])
 
-  const BlogsList = () => (
+  const BlogsList = ({updateBlogPost}) => (
     <div className="blogs">
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} updateBlogPost={updateBlogPost}/>
         )}
     </div>
   )
@@ -149,7 +172,7 @@ const App = () => {
           ></LoginForm> : 
           <div>
             <p>{user.name} logged in</p><button onClick={() => handleLogout()} type="submit">logout</button>
-            <BlogsList/>
+            <BlogsList updateBlogPost = {updateBlogPost}/>
             {BlogFormToggle()}
           </div>
         }
