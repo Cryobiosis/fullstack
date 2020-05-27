@@ -12,11 +12,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  
-  const [title,  setTitle]  = useState('')
-  const [author, setAuthor]  = useState('')
-  const [url,    setUrl]  = useState('')
-  
+   
   const [infoMessage, setInfoMessage]   = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
@@ -62,29 +58,20 @@ const App = () => {
     window.location.reload(false);
   }
 
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value)
-  }
-  const handleAuthorChange = (event) => {
-    setAuthor(event.target.value)
-  }
-  const handleUrlChange = (event) => {
-    setUrl(event.target.value)
-  }
-  const addBlogPost = (event) => {
+  const addBlogPost = (blogPost) => {
 
     // NOTE: This should be inside blogService, but then blogFormRef is not found...
     // This will close form always, also in errors...
     blogFormRef.current.toggleVisibility()
 
-    event.preventDefault()
+    // event.preventDefault()
     console.log("add post")
-
+/*
     const blogPost = {
       title:  title,
       author: author,
       url:    url,
-    }
+    }*/
     // Create new object with POST
     blogService
       .create(blogPost)
@@ -95,9 +82,9 @@ const App = () => {
         setInfoMessage(`a new blog '${blogPost.title}' added`)
 
         // Reset always user input fields
-        setTitle('')
-        setAuthor('')
-        setUrl('')
+        //setTitle('')
+        //setAuthor('')
+        //setUrl('')
 
         // Hide form
         // blogFormRef.current.toggleVisibility()
@@ -141,10 +128,7 @@ const App = () => {
   const BlogFormToggle = () => (
     <Togglable buttonLabel='new blog post' ref={blogFormRef}>
       <BlogForm
-        onSubmit      = {addBlogPost} 
-        titleOnChange = {handleTitleChange} 
-        authorOnChange= {handleAuthorChange}
-        urlOnChange   = {handleUrlChange}
+        addBlogPost      = {addBlogPost} 
       />
     </Togglable>
   )
