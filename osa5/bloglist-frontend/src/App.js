@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react'
+import LoginForm      from './components/LoginForm'
+import Togglable      from './components/Togglable'
 import Blog           from './components/Blog'
 import BlogForm       from './components/BlogForm'
 import Notification   from './components/Notification'
@@ -18,7 +20,10 @@ const App = () => {
   const [infoMessage, setInfoMessage]   = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
+  // const [loginVisible, setLoginVisible] = useState(false)
+
   const [user, setUser] = useState(null)
+  const blogFormRef = React.createRef()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -67,6 +72,11 @@ const App = () => {
     setUrl(event.target.value)
   }
   const addBlogPost = (event) => {
+
+    // NOTE: This should be inside blogService, but then blogFormRef is not found...
+    // This will close form always, also in errors...
+    blogFormRef.current.toggleVisibility()
+
     event.preventDefault()
     console.log("add post")
 
@@ -88,6 +98,10 @@ const App = () => {
         setTitle('')
         setAuthor('')
         setUrl('')
+
+        // Hide form
+        // blogFormRef.current.toggleVisibility()
+
         // Reget all blog items from server
         blogService.getAll().then(blogs =>
           setBlogs( blogs )
@@ -96,13 +110,12 @@ const App = () => {
           setInfoMessage(null)
         }, 5000) 
     }).catch(error => {
+      console.log(error)
       setErrorMessage(`the blog '${blogPost.title}' can't be created. Error: ${error.response.data.error}`)
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000) 
     })
-    
-    
   }
 
   // Check login information from local storage on start up
@@ -117,49 +130,45 @@ const App = () => {
     }  
   }, [])
 
-  const loginForm = () => (     
-    <div clas="loginform">
-      <h2> Login </h2>
-      <form onSubmit={handleLogin}>
-        <div>username
-          <input type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)}/>
-        </div>
-        <div>password
-          <input type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)}/>
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </div>
-  )
-
-  const blogsForm = () => (
-    <div class="blogs">
-      <h2>blogs</h2>
-      <p>{user.name} logged in</p><button onClick={() => handleLogout()} type="submit">logout</button>
-
+  const BlogsList = () => (
+    <div className="blogs">
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
         )}
     </div>
   )
-  
+
+  const BlogFormToggle = () => (
+    <Togglable buttonLabel='new blog post' ref={blogFormRef}>
+      <BlogForm
+        onSubmit      = {addBlogPost} 
+        titleOnChange = {handleTitleChange} 
+        authorOnChange= {handleAuthorChange}
+        urlOnChange   = {handleUrlChange}
+      />
+    </Togglable>
+  )
+
   return (
     <div>
-      <div class="messages">
+      <h2>blogs</h2>
+      <div className='messages'>
         <Notification message={infoMessage}  type='info'/>
         <Notification message={errorMessage} type='error'/>
       </div>
-      
+
       {user === null ?
-        loginForm() :
-        blogsForm() 
-      }
-     <BlogForm
-      onSubmit      = {addBlogPost} 
-      titleOnChange = {handleTitleChange} 
-      authorOnChange= {handleAuthorChange}
-      urlOnChange   = {handleUrlChange}
-     />
+        <LoginForm 
+          handleLogin={handleLogin}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          ></LoginForm> : 
+          <div>
+            <p>{user.name} logged in</p><button onClick={() => handleLogout()} type="submit">logout</button>
+            <BlogsList/>
+            {BlogFormToggle()}
+          </div>
+        }
     </div>
   )
 }
