@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 // import Togglable from '../components/Togglable'
 
-const Blog = ({ blog, updateBlogPost}) =>  {
+const Blog = ({ blog, updateBlogPost, removeBlogPost}) =>  {
 
   const [full, setShowFull] = useState(false)
 
@@ -32,6 +32,10 @@ const Blog = ({ blog, updateBlogPost}) =>  {
 
     // console.log('addlike')
   }
+  const deleteBlog = (event) => {
+    removeBlogPost({title: blog.title, id: blog.id})
+    console.log('DELETE: ' + blog.id)
+  }
 
   return (
   <div style={blogStyle}>
@@ -46,6 +50,7 @@ const Blog = ({ blog, updateBlogPost}) =>  {
         <p>{blog.url}</p>
         <div>likes {blog.likes} <button onClick={() => addLike()} type="submit">like</button></div>
         <button onClick={() => setShowFull(false)} type="submit">hide</button>
+        <button onClick={() => deleteBlog()} type="submit">remove</button>
       </div>
     }
 

@@ -131,6 +131,31 @@ const App = () => {
     })
     console.log('update')
   }
+  
+  const removeBlogPost = ({title, id}) => {
+    if (window.confirm(`Remove blog '${title}' ?`)) {
+      blogService
+      .remove(id)
+      .then(returnedPerson => {
+        setInfoMessage(`blog post '${title}' removed`)
+        
+        // Reget all blog items from server
+        blogService.getAll().then(blogs =>
+          setBlogs( blogs )
+        )
+        setTimeout(() => {
+          setInfoMessage(null)
+        }, 5000) 
+      }).catch(error => {
+        console.log(error)
+        setErrorMessage(`the blog '${title}' can't be deleted. Error: ${error.response.data.error}`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000) 
+      })
+    }
+    console.log('delete')
+  }
 
   // Check login information from local storage on start up
   useEffect(() => {
@@ -147,7 +172,7 @@ const App = () => {
   const BlogsList = ({updateBlogPost}) => (
     <div className="blogs">
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} updateBlogPost={updateBlogPost}/>
+          <Blog key={blog.id} blog={blog} updateBlogPost={updateBlogPost} removeBlogPost={removeBlogPost}/>
         )}
     </div>
   )
@@ -176,7 +201,7 @@ const App = () => {
           ></LoginForm> : 
           <div>
             <p>{user.name} logged in</p><button onClick={() => handleLogout()} type="submit">logout</button>
-            <BlogsList updateBlogPost = {updateBlogPost}/>
+            <BlogsList updateBlogPost={updateBlogPost} removeBlogPost={removeBlogPost}/>
             {BlogFormToggle()}
           </div>
         }
