@@ -1,8 +1,6 @@
-import React, {useState} from 'react'
-// import Togglable from '../components/Togglable'
+import React, { useState } from 'react'
 
-const Blog = ({ blog, updateBlogPost, removeBlogPost}) =>  {
-
+const Blog = ({ blog, updateBlogPost, removeBlogPost }) =>  {
   const [full, setShowFull] = useState(false)
 
   const blogStyle = {
@@ -12,7 +10,7 @@ const Blog = ({ blog, updateBlogPost, removeBlogPost}) =>  {
     borderWidth: 1,
     marginBottom: 5
   }
-  const addLike = (event) => {
+  const addLike = () => {
     //event.preventDefault()
     const blogPost = {
       id:     blog.id,
@@ -24,37 +22,31 @@ const Blog = ({ blog, updateBlogPost, removeBlogPost}) =>  {
     }
     //console.log(blogPost)
     // const copy = [...blog]
-    // copy.likes++;
-    // console.log(copy)
-    //console.log(blog);
-
     updateBlogPost(blogPost, blog.id)
-
-    // console.log('addlike')
   }
-  const deleteBlog = (event) => {
-    removeBlogPost({title: blog.title, id: blog.id})
-    console.log('DELETE: ' + blog.id)
+
+  const deleteBlog = () => {
+    removeBlogPost({ title: blog.title, id: blog.id })
+    // console.log('DELETE: ' + blog.id)
   }
 
   return (
-  <div style={blogStyle}>
-    {blog.title}
-
-    {full === false ?
-      <div>
-        <button onClick={() => setShowFull(true)} type="submit">show</button>
-      </div> : 
-      <div>
-        <p>{blog.author}</p>
-        <p>{blog.url}</p>
-        <div>likes {blog.likes} <button onClick={() => addLike()} type="submit">like</button></div>
-        <button onClick={() => setShowFull(false)} type="submit">hide</button>
-        <button onClick={() => deleteBlog()} type="submit">remove</button>
-      </div>
-    }
-
-  </div>
-)}
+    <div style={blogStyle}>
+      {blog.title}
+      {full === false ?
+        <div>
+          <button onClick={() => setShowFull(true)} type="submit">show</button>
+        </div> :
+        <div>
+          <p>{blog.author}</p>
+          <p>{blog.url}</p>
+          <div>likes {blog.likes} <button onClick={() => addLike()} type="submit">like</button></div>
+          <button onClick={() => setShowFull(false)} type="submit">hide</button>
+          <button onClick={() => deleteBlog()} type="submit">remove</button>
+        </div>
+      }
+    </div>
+  )
+}
 
 export default Blog

@@ -1,8 +1,7 @@
-import React, {useState} from 'react' 
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const BlogForm = ({ addBlogPost }) => {
-  
   const [title,  setTitle]    = useState('')
   const [author, setAuthor]   = useState('')
   const [url,    setUrl]      = useState('')
@@ -16,7 +15,7 @@ const BlogForm = ({ addBlogPost }) => {
   const handleUrlChange = (event) => {
     setUrl(event.target.value)
   }
- 
+
   const addBlog = (event) => {
     event.preventDefault()
     const blogPost = {
@@ -25,31 +24,30 @@ const BlogForm = ({ addBlogPost }) => {
       url:    url,
     }
     addBlogPost(blogPost)
-  
     // TODO: In case error don't clean these..
     setTitle('')
     setAuthor('')
-    setUrl('')  
+    setUrl('')
   }
- 
-    return (
-      <form onSubmit={addBlog}>
-        <label>
-          title:
-          <input type="text" name="title" value={title} onChange={handleTitleChange}/>
-        </label>
-        <label>
-          author:
-          <input type="text" name="author" value={author} onChange={handleAuthorChange}/>
-        </label>
-        <label> url:
-          <input type="text" name="url" value={url} onChange={handleUrlChange}/>
-        </label>
-        <div>
-          <button type="submit">create</button>
-        </div>
-      </form>
-      )
+
+  return (
+    <form onSubmit={addBlog}>
+      <label>
+        title:
+        <input type="text" name="title" value={title} onChange={handleTitleChange}/>
+      </label>
+      <label>
+        author:
+        <input type="text" name="author" value={author} onChange={handleAuthorChange}/>
+      </label>
+      <label> url:
+        <input type="text" name="url" value={url} onChange={handleUrlChange}/>
+      </label>
+      <div>
+        <button type="submit">create</button>
+      </div>
+    </form>
+  )
 }
 
 BlogForm.propTypes = {
