@@ -100,5 +100,21 @@ describe('Blog app', function() {
       // Create another user
     })*/
 
+    it('Blogs are ordered by likes', function () {
+      cy.createBlog({ title: 'test 1', author: 'author', 'url': 'http://localhost/', 'likes': 1 })
+      cy.createBlog({ title: 'test 2', author: 'author', 'url': 'http://localhost/', 'likes': 20 })
+      cy.createBlog({ title: 'test 3', author: 'author', 'url': 'http://localhost/', 'likes': 10 })
+      cy.createBlog({ title: 'test 4', author: 'author', 'url': 'http://localhost/', 'likes': 2 })
+
+      // Get all blogs and check order
+      cy.get('[data-cy=blog]').then(($blog) => {
+        // console.log($blog)
+        cy.wrap($blog[0]).contains('test 2')
+        cy.wrap($blog[1]).contains('test 3')
+        cy.wrap($blog[2]).contains('test 4')
+        cy.wrap($blog[3]).contains('test 1')
+      })
+
+    })
   })
 })

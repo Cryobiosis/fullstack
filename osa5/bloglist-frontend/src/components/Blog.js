@@ -35,11 +35,11 @@ const Blog = ({ blog, updateBlogPost, removeBlogPost, likeButton }) =>  {
   likeButton = (likeButton) ? likeButton : addLike
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} data-cy='blog'>
       {blog.title}
       {full === false ?
         <div>
-          <button onClick={() => setShowFull(true)} type="submit">show</button>
+          <button onClick={() => setShowFull(true)} type="submit">show</button>likes {blog.likes}
         </div> :
         <div>
           <p>{blog.author}</p>
