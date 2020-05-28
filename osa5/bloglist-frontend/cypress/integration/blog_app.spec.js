@@ -90,11 +90,11 @@ describe('Blog app', function() {
       cy.contains('show').click()
       // Press remove
       cy.contains('remove').click()
-      cy.should('not.contain', 'test blog')
-      //cy.get('html').contains('test blog2').should('not.exist')
+      // cy.get('html').should('not.contain', 'test blog2')
+      cy.get('html').contains('test blog2').not().should('not.exist')
     })
 
-    it.only('Another user can\'t delete a blog post', function () {
+    it('Another user can\'t delete a blog post', function () {
       cy.createBlog({ title: 'test blog2', author: 'author', 'url': 'http://localhost/' })
 
       // Create another user
