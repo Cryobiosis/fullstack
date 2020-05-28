@@ -32,16 +32,16 @@ Cypress.Commands.add('login', ({ username, password }) => {
     cy.visit('http://localhost:3000')
   })
 })
-/*
-Cypress.Commands.add('createNote', ({ content, important }) => {
+
+Cypress.Commands.add('createBlog', ({ title, author, url }) => {
   cy.request({
-    url: 'http://localhost:3001/api/notes',
+    url: 'http://localhost:3003/api/blogs',
     method: 'POST',
-    body: { content, important },
+    body: { title, author, url },
     headers: {
-      'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedNoteappUser')).token}`
+      'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedBlogUser')).token}`
     }
   })
 
   cy.visit('http://localhost:3000')
-})*/
+})

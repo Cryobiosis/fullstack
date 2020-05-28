@@ -50,7 +50,7 @@ describe('Blog app', function() {
       cy.login({ username: 'testi', password: 'SALASANA' })
     })
 
-    it('A blog can be created', function() {
+    it('A blog post can be created (frontend)', function() {
       cy.contains('new blog post').click()
 
       cy.get('input[name="title"]').type('New blog')
@@ -62,10 +62,26 @@ describe('Blog app', function() {
       //cy.contains('save').click()
       // cy.contains('New blog')
     })
-    describe('and a blog post exists', function() {
-      it('and new blog post exists', function () {
-        cy.contains('New blog')
-      })
+
+    it('and new blog post exists', function () {
+      cy.contains('New blog')
+    })
+
+    it('A blog post can be created directly fom cypress', function() {
+      cy.createBlog({ title: 'test blog', author: 'author', 'url': 'http://localhost/' })
+      cy.contains('test blog')
+    })
+
+    it.only('Like increases likes', function () {
+      cy.createBlog({ title: 'test blog', author: 'author', 'url': 'http://localhost/' })
+      // Open blog
+      cy.contains('show').click()
+      // Press like button
+      cy.contains('like').click()
+      // Open blog again and check likes
+      cy.contains('show').click()
+      cy.contains('likes 1')
+      // cy.get('html').should('contain', 'likes 1')
     })
 
   })

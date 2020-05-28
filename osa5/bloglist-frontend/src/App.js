@@ -96,16 +96,20 @@ const App = () => {
     blogService
       .update(blogPost, id)
       .then(returnedBlog => {
-        setInfoMessage(`blog post '${blogPost.title}' updated`)
         // Reget all blog items from server
         blogService.getAll().then(blogs =>
           setBlogs( blogs )
-        )
-        // Or we could use
-        console.log(returnedBlog)
-        setTimeout(() => {
-          setInfoMessage(null)
-        }, 5000)
+        ).then(() => {
+          setInfoMessage(`blog post '${blogPost.title}' updated`)
+          // Or we could use
+          // console.log(returnedBlog)
+          // setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+          // setBlogs([])
+          console.log(returnedBlog)
+          setTimeout(() => {
+            setInfoMessage(null)
+          }, 5000)
+        })
       }).catch(error => {
         console.log(error)
         setErrorMessage(`the blog '${blogPost.title}' can't be updated. Error: ${error.response.data.error}`)
