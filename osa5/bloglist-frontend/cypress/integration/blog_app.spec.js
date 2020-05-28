@@ -38,32 +38,35 @@ describe('Blog app', function() {
     cy.get('html').should('not.contain', 'Teuvo Testi logged in')
   })
 
-/*
-  describe('when logged in', function() {
-    beforeEach(function() {
-      cy.login({ username: 'root2', password: 'salasana' })
-    })
-
-    it('a new note can be created', function() {
-      cy.contains('new note').click()
-      cy.get('input').type('a note created by cypress')
-      cy.contains('save').click()
-
-      cy.contains('a note created by cypress')
-    })
-
-    describe('and a note exists', function () {
-      beforeEach(function () {
-        cy.createNote({ content: 'first note', important: false })
-        cy.createNote({ content: 'second note', important: false })
-        cy.createNote({ content: 'third note', important: false })
-      })
-
-      it('it can be made important', function () {
-        cy.contains('second note').parent().find('button').click()
-        cy.contains('second note').parent().find('button').should('contain', 'make not important')
-      })
-    })
+  it('user can login directly fom cypress', function () {
+    cy.login({ username: 'testi', password: 'SALASANA' })
+    cy.visit('http://localhost:3000')
+    cy.contains('Teuvo Testi logged in')
   })
-*/
+
+  describe('when logged in', function() {
+
+    beforeEach(function() {
+      cy.login({ username: 'testi', password: 'SALASANA' })
+    })
+
+    it('A blog can be created', function() {
+      cy.contains('new blog post').click()
+
+      cy.get('input[name="title"]').type('New blog')
+      cy.get('input[name="author"]').type('Somebody')
+      cy.get('input[name="url"]').type('http://localhost/')
+      cy.contains('create').click()
+
+      //cy.get('input').type('a note created by cypress')
+      //cy.contains('save').click()
+      // cy.contains('New blog')
+    })
+    describe('and a blog post exists', function() {
+      it('and new blog post exists', function () {
+        cy.contains('New blog')
+      })
+    })
+
+  })
 })
