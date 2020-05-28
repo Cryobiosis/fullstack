@@ -72,7 +72,7 @@ describe('Blog app', function() {
       cy.contains('test blog')
     })
 
-    it.only('Like increases likes', function () {
+    it('Like increases likes', function () {
       cy.createBlog({ title: 'test blog', author: 'author', 'url': 'http://localhost/' })
       // Open blog
       cy.contains('show').click()
@@ -83,6 +83,22 @@ describe('Blog app', function() {
       cy.contains('likes 1')
       // cy.get('html').should('contain', 'likes 1')
     })
+
+    it('Blog creator can can delete blog post', function () {
+      cy.createBlog({ title: 'test blog2', author: 'author', 'url': 'http://localhost/' })
+      // Open blog
+      cy.contains('show').click()
+      // Press remove
+      cy.contains('remove').click()
+      cy.should('not.contain', 'test blog')
+      //cy.get('html').contains('test blog2').should('not.exist')
+    })
+    // TODO:
+    /*
+    it.only('Only blog creator can delete blog post', function () {
+      cy.createBlog({ title: 'test blog2', author: 'author', 'url': 'http://localhost/' })
+      // Create another user
+    })*/
 
   })
 })

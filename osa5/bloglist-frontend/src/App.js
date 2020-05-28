@@ -125,16 +125,17 @@ const App = () => {
       blogService
         .remove(id)
         .then(returnedBlog => {
-          setInfoMessage(`blog post '${title}' removed`)
           // Reget all blog items from server
           blogService.getAll().then(blogs =>
             setBlogs( blogs )
-          )
-          // Or we could use
-          console.log(returnedBlog)
-          setTimeout(() => {
-            setInfoMessage(null)
-          }, 5000)
+          ).then(() => {
+            setInfoMessage(`blog post '${title}' removed`)
+            // Or we could use
+            console.log(returnedBlog)
+            setTimeout(() => {
+              setInfoMessage(null)
+            }, 5000)
+          })
         }).catch(error => {
           console.log(error)
           setErrorMessage(`the blog '${title}' can't be deleted. Error: ${error.response.data.error}`)
