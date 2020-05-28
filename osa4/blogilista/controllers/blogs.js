@@ -51,6 +51,9 @@ blogsRouter.post('/', async (request, response) => {
   }
   const user = await User.findById(decodedToken.id)
 
+  if (!user) {
+    return response.status(401).json({ error: 'user not found' })
+  }
   const blog = new Blog({
     title:  request.body.title,
     author: request.body.author,
