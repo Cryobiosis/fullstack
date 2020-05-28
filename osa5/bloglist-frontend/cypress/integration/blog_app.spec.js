@@ -93,12 +93,30 @@ describe('Blog app', function() {
       cy.should('not.contain', 'test blog')
       //cy.get('html').contains('test blog2').should('not.exist')
     })
-    // TODO:
-    /*
-    it.only('Only blog creator can delete blog post', function () {
+
+    it.only('Another user can\'t delete a blog post', function () {
       cy.createBlog({ title: 'test blog2', author: 'author', 'url': 'http://localhost/' })
+
       // Create another user
-    })*/
+      const user = {
+        name: 'Tiina Testi',
+        username: 'testi2',
+        password: 'SALASANA2'
+      }
+      cy.request('POST', 'http://localhost:3003/api/users/', user)
+      cy.visit('http://localhost:3000')
+
+      // Log another user in
+      cy.login({ username: 'testi2', password: 'SALASANA2' })
+      cy.visit('http://localhost:3000')
+      cy.contains('Tiina Testi logged in')
+
+      // Try to delete another user blog post
+      cy.contains('show').click()
+      // Press remove
+      cy.contains('remove').click()
+      cy.contains('test blog')
+    })
 
     it('Blogs are ordered by likes', function () {
       cy.createBlog({ title: 'test 1', author: 'author', 'url': 'http://localhost/', 'likes': 1 })
