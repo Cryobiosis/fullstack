@@ -5,7 +5,21 @@ const App = () => {
   const anecdotes = useSelector(state => state)
   const dispatch = useDispatch()
 
+  // Temp name
+  const vote2 = (id) => {
+    return {
+      type: 'VOTE',
+      data: { id }
+    }
+  }
+  
   const vote = (id) => {
+/*
+    store.dispatch({
+      type: 'GOOD'
+    })*/
+    // store.dispatch(vote2(id))
+    dispatch(vote2(id))
     console.log('vote', id)
   }
 
