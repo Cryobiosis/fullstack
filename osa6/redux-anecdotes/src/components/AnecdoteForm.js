@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
-import { voteActionCreator, newAnecdoteActionCreator } from '../reducers/anecdoteReducer'
+import { newAnecdoteActionCreator } from '../reducers/anecdoteReducer'
 
 const AnecdoteForm = () => {
     const dispatch = useDispatch()
@@ -21,7 +21,6 @@ const AnecdoteForm = () => {
       <button type="submit">create</button>
     </form>
   </div>)
-
 }
 
 export default AnecdoteForm
