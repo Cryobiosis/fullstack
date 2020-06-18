@@ -3,6 +3,10 @@ import { useSelector, useDispatch } from 'react-redux'
 
 const App = () => {
   const anecdotes = useSelector(state => state)
+
+  // Sort anecdotest by vote
+  anecdotes.sort((a, b) => (a.votes > b.votes) ? -1 : 1)
+
   const dispatch = useDispatch()
   
   const addAnecdote = (event) => {
