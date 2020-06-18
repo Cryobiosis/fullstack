@@ -60,6 +60,7 @@ const App = () => {
   return (
     <div>
        <h2>give feedback</h2>
+       
           
       <button onClick={good}>good</button> 
       <button onClick={ok}>neutral</button> 

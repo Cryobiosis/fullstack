@@ -34,9 +34,17 @@ const reducer = (state = initialState, action) => {
       return state.map(ane =>
         ane.id !== id ? ane : changedAne 
       )
-    
+    case 'NEW_ANECDOTE':
+      const newAnecdote = {
+        content: action.data.content,
+        id: getId(),
+        votes: 0
+      }
+      return state.concat(newAnecdote)
+      // return { ...state, newAnecdote } 
+  
      default: return state
-  }  
+  }
 }
 
 export default reducer
