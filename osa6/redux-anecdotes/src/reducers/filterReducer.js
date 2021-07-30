@@ -1,6 +1,6 @@
 const filterReducer = (filter = '', action) => {
-  console.log('F: state now: ', filter)
-  console.log('F: action', action)
+  //console.log('F: state now: ', filter)
+  //console.log('F: action', action)
 
   switch (action.type) {
 
