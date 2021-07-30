@@ -3,11 +3,22 @@ import { useDispatch, useSelector } from 'react-redux'
 import { voteActionCreator } from '../reducers/anecdoteReducer'
 import { newNotificationActionCreator } from '../reducers/notificationReducer'
 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
+const filterItems = (arr, query) => {
+  return arr.filter(el => el.content.toLowerCase().indexOf(query.toLowerCase()) !== -1)
+}
+
 const AnecdoteList = () => {
 
     const dispatch = useDispatch()
-    const anecdotes = useSelector(state => state.anecdotes)
+    let anecdotes = useSelector(state => state.anecdotes)
 
+    // Filter anedotes
+    const filter = useSelector(state => state.filter)
+    if (filter) {
+      anecdotes = filterItems(anecdotes, filter)
+    }
+   
     // Sort anecdotest by vote
     anecdotes.sort((a, b) => (a.votes > b.votes) ? -1 : 1)
      
