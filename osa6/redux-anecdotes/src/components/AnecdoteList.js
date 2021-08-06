@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { voteActionCreator } from '../reducers/anecdoteReducer'
-import { newNotificationActionCreator } from '../reducers/notificationReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
 const filterItems = (arr, query) => {
@@ -29,13 +29,8 @@ const AnecdoteList = () => {
       // Update remote server
       // TODO: What if 2 users update this at same time?
       dispatch(voteActionCreator(id, anecdote.votes +1 ))
-      const message = 'you voted \'' + anecdote.content + '\''
   
-      dispatch(newNotificationActionCreator(message))
-
-      setTimeout(() => {
-        dispatch(newNotificationActionCreator(''))
-      }, 5000)
+      dispatch(setNotification(`you voted '${anecdote.content}'`, 10))
 
       console.log('vote', id)
     }
