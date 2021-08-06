@@ -1,4 +1,4 @@
-import anecdotes from "../services/anecdotes"
+// import anecdotes from "../services/anecdotes"
 
 const getId = () => (100000 * Math.random()).toFixed(0)
 
@@ -20,7 +20,7 @@ const anecdoteReducer = (state = [], action) => {
     case 'NEW_ANECDOTE':
       const newAnecdote = {
         content: action.data.content,
-        id: getId(),
+        // id: getId(),
         votes: 0
       }
       return state.concat(newAnecdote)
