@@ -23,9 +23,13 @@ const AnecdoteList = () => {
     anecdotes.sort((a, b) => (a.votes > b.votes) ? -1 : 1)
      
     const vote = (id) => {
-      dispatch(voteActionCreator(id))
-      const content = anecdotes.find(x => x.id === id).content;
-      const message = 'you voted \'' + content + '\''
+      // Find voted anecdote
+      const anecdote = anecdotes.find(x => x.id === id);
+
+      // Update remote server
+      // TODO: What if 2 users update this at same time?
+      dispatch(voteActionCreator(id, anecdote.votes +1 ))
+      const message = 'you voted \'' + anecdote.content + '\''
   
       dispatch(newNotificationActionCreator(message))
 

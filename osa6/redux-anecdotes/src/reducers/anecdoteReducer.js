@@ -32,10 +32,14 @@ const anecdoteReducer = (state = [], action) => {
   }
 }
 
-export const voteActionCreator = (id) => {
-  return {
-    type: 'VOTE',
-    data: { id }
+export const voteActionCreator = (id, votes) => {
+
+  return async dispatch => {
+    const newVote = await anecdotesService.newVote(id, votes)
+    dispatch({
+      type: 'VOTE',
+      data: { id }
+    })
   }
 }
 

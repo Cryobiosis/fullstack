@@ -13,7 +13,16 @@ const createNew = async (content) => {
     return response.data
 }
 
+const newVote = async (id, votes) => {
+  console.log('newvote:', id, votes)
+  const object = { votes: votes }
+  // FIXME: Really backend should make vote increase...
+  const response = await axios.patch(baseUrl+'/'+id, object)
+    return response.data
+}
+
 export default { 
   getAll,
   createNew,
+  newVote,
 }
