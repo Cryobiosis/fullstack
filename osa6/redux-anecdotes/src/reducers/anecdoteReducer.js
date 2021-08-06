@@ -1,3 +1,5 @@
+import anecdotes from "../services/anecdotes"
+
 const getId = () => (100000 * Math.random()).toFixed(0)
 
 const anecdoteReducer = (state = [], action) => {
@@ -23,8 +25,10 @@ const anecdoteReducer = (state = [], action) => {
       }
       return state.concat(newAnecdote)
       // return { ...state, newAnecdote } 
-  
-     default: return state
+    case 'INIT_ANECDOTES':
+        return action.data;
+
+    default: return state
   }
 }
 
@@ -34,6 +38,7 @@ export const voteActionCreator = (id) => {
     data: { id }
   }
 }
+
 export const newAnecdoteActionCreator = (content) => {
   return {
     type: 'NEW_ANECDOTE',
@@ -42,6 +47,13 @@ export const newAnecdoteActionCreator = (content) => {
       votes: 0,
       // id: generateId()
     }
+  }
+}
+
+export const intializeAnecdotes = (anecdotes) => {
+  return {
+    type: 'INIT_ANECDOTES',
+    data: anecdotes,
   }
 }
 
