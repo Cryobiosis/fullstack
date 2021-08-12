@@ -22,10 +22,15 @@
   export const setNotification = (message, timeout) => {
 
     return async dispatch => {
-      setTimeout(() => {
+      const timeoutID = setTimeout(() => {
         dispatch(clearNotification())
       }, timeout * 1000)
 
+      // Cancel other timeouts
+      // TODO: This is kludge, it's not quaranteed that timeout id's are increased by int +1
+      clearTimeout(timeoutID -1);
+
+      console.log('timeoutID', timeoutID)
       dispatch ({
         type: 'NEW_NOTIFICATION',
         data: { message }

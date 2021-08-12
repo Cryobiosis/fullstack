@@ -13,6 +13,7 @@ const createNew = async (content) => {
     return response.data
 }
 
+// FIXME: Bug when creating new anacdotes, when ID missing, we can't vote..
 const newVote = async (id, votes) => {
   console.log('newvote:', id, votes)
   const object = { votes: votes }
