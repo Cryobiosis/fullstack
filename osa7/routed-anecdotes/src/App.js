@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {
   BrowserRouter as Router,
-  Switch, Route, Link, useRouteMatch
+  Switch, Route, Link, useRouteMatch, useHistory
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -11,7 +11,7 @@ const Menu = () => {
   return (
     <div>
       <Link style={padding} to="/">anecdotes</Link>
-      <Link style={padding} to="/new">reate new</Link>
+      <Link style={padding} to="/new">create new</Link>
       <Link style={padding} to="/about">about</Link>
     </div>
   )
@@ -75,9 +75,10 @@ const Footer = () => (
 
 const CreateNew = (props) => {
   const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
-
+  const [author, setAuthor]   = useState('')
+  const [info, setInfo]       = useState('')
+  // const [notification, setNotification] = useState('aaa')
+  // const history               = useHistory()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -87,6 +88,10 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    // setNotification(`a new anecdote ${content} created!`)
+
+    // Redirect to front page
+    // history.push('/')
   }
 
   return (
@@ -109,10 +114,25 @@ const CreateNew = (props) => {
       </form>
     </div>
   )
+}
 
+const Notification = ({notification}) => {
+
+  const style = {
+    border: 'solid',
+    padding: 10,
+    borderWidth: 1
+  }
+  return (
+    <div style={style}>
+      {notification}
+    </div>
+  )
 }
 
 const App = () => {
+  const history               = useHistory()
+
   const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
@@ -135,6 +155,16 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+
+    // Redirect to front page
+    history.push('/')
+
+    setNotification(`a new anecdote ${anecdote.content} created!`)
+    // Hide message
+    setTimeout(() => {
+      setNotification()
+    }, 10 * 1000)
+    
   }
 
   const anecdoteById = (id) =>
@@ -152,7 +182,7 @@ const App = () => {
       ...anecdote,
       votes: anecdote.votes + 1
     }
-
+   
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
 
@@ -160,6 +190,7 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      <Notification notification={notification}/>
       <Switch>
         <Route path="/anecdotes/:id">
           <AnecdoteView anecdote={anecdote} />
