@@ -84,8 +84,6 @@ const CreateNew = (props) => {
   const author  = useField('text')
   const info    = useField('text')
 
-  console.log(content.value)
-
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
@@ -99,7 +97,13 @@ const CreateNew = (props) => {
     // Redirect to front page
     // history.push('/')
   }
- 
+
+  const resetForm = () => {
+    content._reset();
+    author._reset();
+    info._reset();
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -115,6 +119,7 @@ const CreateNew = (props) => {
         </div>
 
         <button>create</button>
+        <button type="reset" onClick={resetForm}>reset</button>
       </form>
     </div>
   )
