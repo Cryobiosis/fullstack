@@ -75,14 +75,11 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  //const [content, setContent] = useState('')
-  //const [author, setAuthor]   = useState('')
-  //const [info, setInfo]       = useState('')
-  // const [notification, setNotification] = useState('aaa')
-  // const history               = useHistory()
-  const content = useField('text')
-  const author  = useField('text')
-  const info    = useField('text')
+  
+  // Array pop _reset from object so that we can rid of error: Invalid value for prop `_reset` on <input> tag. Either remove it from the element, 
+  const { _reset: contentReset, ...content }   = useField('text')
+  const { _reset: authorReset, ...author }     = useField('text')
+  const { _reset: infoReset, ...info }         = useField('text')
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -99,11 +96,17 @@ const CreateNew = (props) => {
   }
 
   const resetForm = () => {
-    content._reset();
-    author._reset();
-    info._reset();
+    contentReset();
+    authorReset();
+    infoReset();
   }
 
+  /*
+  const { reset1, ...content2} = content;
+  const { reset2, ...author2}  = author;
+  const { reset3, ...info2}    = info;
+  console.log(info2)
+  */
   return (
     <div>
       <h2>create a new anecdote</h2>
