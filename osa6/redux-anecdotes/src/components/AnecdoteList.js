@@ -29,7 +29,6 @@ const AnecdoteList = () => {
       // Update remote server
       // TODO: What if 2 users update this at same time?
       dispatch(voteActionCreator(id, anecdote.votes +1 ))
-  
       dispatch(setNotification(`you voted '${anecdote.content}'`, 10))
 
       console.log('vote', id)

@@ -3,7 +3,7 @@
       case 'NEW_NOTIFICATION':
         return action.data.message;
       case 'CLEAR_NOTIFICATION':
-        console.log('reducer clear')
+        // console.log('reducer clear')
         return false
        default: return message
     }
