@@ -14,7 +14,10 @@ const AnecdoteList = () => {
     let anecdotes = useSelector(state => state.anecdotes)
 
     // Filter anedotes
+    // Use connect?
     const filter = useSelector(state => state.filter)
+    // const filter = Filter.props
+
     if (filter) {
       anecdotes = filterItems(anecdotes, filter)
     }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 import { connect } from 'react-redux'
 
 const Notification = (props) => {
@@ -28,12 +28,6 @@ const mapStateToProps = (state) => {
 
 const ConnectedNotification = connect(mapStateToProps)(Notification)
 export default ConnectedNotification
-/*
-export default connect(
-  null,
-  { createNote }
-)(Notification)
-*/
 
 // Redux store
 // export default Notification

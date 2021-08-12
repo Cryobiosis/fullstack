@@ -1,13 +1,15 @@
 import React from 'react'
 import { filterActionCreator } from '../reducers/filterReducer'
-import { useDispatch } from 'react-redux'
+// import { useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 
-const Filter = () => {
-  const dispatch = useDispatch()
-
+const Filter = (props) => {
+  // const dispatch = useDispatch()
+  
   const handleChange = (event) => {
     // input-kentän arvo muuttujassa event.target.value
-    dispatch(filterActionCreator(event.target.value))
+    // dispatch(filterActionCreator(event.target.value))
+    props.filterActionCreator(event.target.value)
   }
   const style = {
     marginBottom: 10
@@ -20,4 +22,19 @@ const Filter = () => {
   )
 }
 
-export default Filter
+const mapStateToProps = (state) => {
+  return {
+    filter: state.filter
+  }
+}
+
+const mapDispatchToProps = {
+  filterActionCreator,
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Filter)
+
+// export default Filter
