@@ -18,7 +18,32 @@ const useField = (type) => {
 const useCountry = (name) => {
   const [country, setCountry] = useState(null)
 
-  useEffect(() => {})
+  // console.log('use country')
+  useEffect(() => {
+    
+    // console.log('use effect')
+    // Make a request for a user with a given ID
+    axios.get(`https://restcountries.eu/rest/v2/name/${name}?fullText=true`)
+    .then(function (response) {
+    
+      // Map data to old format?
+      const data = {
+        found: true,
+        data: response.data[0]
+      }
+
+      setCountry(data)
+      // handle success
+      // console.log(response);
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+    .then(function () {
+      // always executed
+    });
+  }, [name]) // Only when name changes
 
   return country
 }
