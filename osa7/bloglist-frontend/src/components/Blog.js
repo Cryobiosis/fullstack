@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
+import { likeActionCreator } from '../reducers/blogReducer'
+import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, updateBlogPost, removeBlogPost, likeButton }) =>  {
+const Blog = ({ blog, removeBlogPost, likeButton }) =>  {
   const [full, setShowFull] = useState(false)
+  const dispatch = useDispatch()
 
   const blogStyle = {
     paddingTop: 10,
@@ -13,7 +16,7 @@ const Blog = ({ blog, updateBlogPost, removeBlogPost, likeButton }) =>  {
 
   const addLike = () => {
     //event.preventDefault()
-    const blogPost = {
+    const changedBlog = {
       id:     blog.id,
       title:  blog.title,
       author: blog.author,
@@ -21,9 +24,19 @@ const Blog = ({ blog, updateBlogPost, removeBlogPost, likeButton }) =>  {
       likes:  blog.likes +1,
       user:   blog.user.id,
     }
+    /*
+    const state = useSelector(state => state)
+    const blogToChange = state.find(n => n.id === blog.id)
+    const changedBlog = {
+      ...blogToChange,
+      likes: blogToChange.likes + 1
+    }*/
+    // Redux
+    dispatch(likeActionCreator(changedBlog, blog.id))
+
     //console.log(blogPost)
     // const copy = [...blog]
-    updateBlogPost(blogPost, blog.id)
+    // updateBlogPost(blogPost, blog.id)
   }
 
   const deleteBlog = () => {

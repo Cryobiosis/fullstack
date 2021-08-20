@@ -162,6 +162,26 @@ const App = () => {
   const removeBlogPost = ({ title, id }) => {
     if (window.confirm(`Remove blog '${title}' ?`)) {
       blogService
+        .remove(id).then(returnedBlog => {
+          // No need for own action creator for remove...
+          // dispatch(removeActionCreator(id)).then(returnedBlog => {
+          setInfoMessage(`blog post '${title}' removed`)
+          // Or we could use
+          console.log(returnedBlog)
+          // Get all blogs again..
+          dispatch(intializeBlogs())
+
+          setTimeout(() => {
+            setInfoMessage(null)
+          }, 5000)
+        }).catch(error => {
+          console.log(error)
+          setErrorMessage(`the blog '${title}' can't be deleted. Error: ${error.response.data.error}`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })/*
+      blogService
         .remove(id)
         .then(returnedBlog => {
           // Reget all blog items from server
@@ -182,7 +202,7 @@ const App = () => {
           setTimeout(() => {
             setErrorMessage(null)
           }, 5000)
-        })
+        })*/
     }
     console.log('delete')
   }
