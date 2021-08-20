@@ -1,48 +1,49 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
+import { useDispatch } from 'react-redux'
+// import PropTypes from 'prop-types'
+import { newblogActionCreator } from '../reducers/blogReducer'
+// import { setInfoMessage } from '../reducers/notificationReducer'
+import { setErrorMessage, setInfoMessage } from '../reducers/notificationReducer'
 
-const BlogForm = ({ addBlogPost }) => {
-  const [title,  setTitle]    = useState('')
-  const [author, setAuthor]   = useState('')
-  const [url,    setUrl]      = useState('')
+const BlogForm = () => {
+  const dispatch = useDispatch()
 
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value)
-  }
-  const handleAuthorChange = (event) => {
-    setAuthor(event.target.value)
-  }
-  const handleUrlChange = (event) => {
-    setUrl(event.target.value)
-  }
-
-  const addBlog = (event) => {
+  const addBlog = async (event) => {
     event.preventDefault()
     const blogPost = {
-      title:  title,
-      author: author,
-      url:    url,
+      title:  event.target.title.value,
+      author: event.target.author.value,
+      url:    event.target.url.value,
     }
-    addBlogPost(blogPost)
-    // TODO: In case error don't clean these..
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+    // addBlogPost(blogPost)
+    console.log(blogPost)
+
+    //const newBlog = await blogService.createNew(blogPost)
+    dispatch(newblogActionCreator(blogPost)).then(returnedBlog => {
+      dispatch(setInfoMessage(`a new blog '${blogPost.title}' added`))
+      console.log(returnedBlog)
+    }).catch(error => {
+      console.log(error)
+      dispatch(setErrorMessage(`the blog '${blogPost.title}' can't be created. Error: ${error.response.data.error}`))
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    })
   }
 
   return (
     <form onSubmit={addBlog}>
       <label>
         title:
-        <input type="text" name="title" value={title} onChange={handleTitleChange}/>
+        <input type="text" name="title" />
       </label>
       <label>
         author:
-        <input type="text" name="author" value={author} onChange={handleAuthorChange}/>
+        <input type="text" name="author" />
       </label>
       <label>
         url:
-        <input type="text" id="url" name="url" value={url} onChange={handleUrlChange}/>
+        <input type="text" id="url" name="url" />
       </label>
       <div>
         <button type="submit">create</button>
@@ -50,8 +51,8 @@ const BlogForm = ({ addBlogPost }) => {
     </form>
   )
 }
-
+/*
 BlogForm.propTypes = {
-  addBlogPost: PropTypes.func.isRequired,
-}
+  addBlog: PropTypes.func.isRequired,
+}*/
 export default BlogForm

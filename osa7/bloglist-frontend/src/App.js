@@ -10,15 +10,18 @@ import loginService   from './services/login'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
-//import { setErrorMessage, setInfoMessage } from './reducers/notificationReducer'
+import { intializeBlogs } from './reducers/blogReducer'
+
+// import { setErrorMessage, setInfoMessage } from './components/Notification'
 // import { createStore } from 'redux'
 import './index.css'
 
 const App = () => {
 
-  const [blogs, setBlogs] = useState([])
+  // TODO: Redux
+  // const [blogs, setBlogs] = useState([])
   // https://flaviocopes.com/how-to-sort-array-of-objects-by-property-javascript/
-  blogs.sort((a, b) => (a.likes > b.likes) ? -1 : 1)
+  // blogs.sort((a, b) => (a.likes > b.likes) ? -1 : 1)
 
   const [username,    setUsername]      = useState('')
   const [password,    setPassword]      = useState('')
@@ -28,10 +31,12 @@ const App = () => {
   const blogFormRef = React.createRef()
 
   // const store = createStore(notificationReducer)
-  const notes = useSelector(state => state)
-  console.log('state=', notes)
-  // const dispatch = useDispatch()
+  const state = useSelector(state => state)
+  const blogs = state.blogs
+  console.log('state=', state)
+
   const dispatch = useDispatch()
+
   const setErrorMessage = (message) => {
     return dispatch(setNotification(message, 'error'))
   }
@@ -59,7 +64,6 @@ const App = () => {
     } catch (exception) {
       //setNotification('foo', 'error')
       // dispatch(setNotification('wrong credentials', 'error'))
-
       setErrorMessage('wrong credentials')
       // console.log('state', store.getState())
 
@@ -70,11 +74,17 @@ const App = () => {
     }
   }
   // Get all blog posts on start up
+  /*
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )
   }, [])
+  */
+  useEffect(() => {
+    dispatch(intializeBlogs())
+    // anecdotesService.getAll().then(anec => dispatch(intializeAnecdotes(anec)))
+  }, [dispatch])
 
   const handleLogout = async () => {
     window.localStorage.setItem('loggedBlogUser', null)
@@ -84,6 +94,7 @@ const App = () => {
     window.location.reload(false)
   }
 
+  /*
   const addBlogPost = (blogPost) => {
     // NOTE: This should be inside blogService, but then blogFormRef is not found...
     // This will close form always, also in errors...
@@ -102,7 +113,8 @@ const App = () => {
 
         // Reget all blog items from server
         blogService.getAll().then(blogs =>
-          setBlogs( blogs )
+          // setBlogs( blogs )
+          console.log('TODO: setBlogs', blogs)
         )
         // Or we could use returnedBlog...
         console.log(returnedBlog)
@@ -117,14 +129,15 @@ const App = () => {
         }, 5000)
       })
   }
-
+  */
   const updateBlogPost = (blogPost, id) => {
     blogService
       .update(blogPost, id)
       .then(returnedBlog => {
         // Reget all blog items from server
         blogService.getAll().then(blogs =>
-          setBlogs( blogs )
+          // setBlogs( blogs )
+          console.log('TODO: setBlogs', blogs)
         ).then(() => {
           setInfoMessage(`blog post '${blogPost.title}' updated`)
           // Or we could use
@@ -153,7 +166,8 @@ const App = () => {
         .then(returnedBlog => {
           // Reget all blog items from server
           blogService.getAll().then(blogs =>
-            setBlogs( blogs )
+            // setBlogs( blogs )
+            console.log('TODO: setBlogs', blogs)
           ).then(() => {
             setInfoMessage(`blog post '${title}' removed`)
             // Or we could use
@@ -195,9 +209,7 @@ const App = () => {
 
   const BlogFormToggle = () => (
     <Togglable buttonLabel='new blog post' ref={blogFormRef}>
-      <BlogForm
-        addBlogPost = {addBlogPost}
-      />
+      <BlogForm />
     </Togglable>
   )
 

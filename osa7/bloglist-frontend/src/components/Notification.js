@@ -1,13 +1,13 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
+//import { useDispatch } from 'react-redux'
 //import { setNotification } from '../reducers/notificationReducer'
 
 const Notification = () => {
 
   // Redux with hooks
-  const message = useSelector(state => state.message)
-  const type = useSelector(state => state.type)
+  const message = useSelector(state => state.notifications.message)
+  const type = useSelector(state => state.notifications.type)
 
   // console.log('message selector state', message)
 
@@ -21,17 +21,8 @@ const Notification = () => {
     </div>
   )
 }
-
-export const setNotification = (message, type, timeout) => {
-  const dispatch = useDispatch()
-
-  console.log('set noti')
-  dispatch(setNotification(message, type, timeout))
-
-}
 /*
-const Notification = ({ message, type }) => {
-  // const dispatch = useDispatch()
+export const setNotification = (message, type, timeout) => {
   const message = useSelector(state => state)
 
   const type = 'info'
@@ -51,5 +42,15 @@ const Notification = ({ message, type }) => {
   )
 }
 */
+/*
+export const setErrorMessage = (message) => {
+  const dispatch = useDispatch()
+  dispatch(setNotification(message, 'error'))
+}
 
+export const setInfoMessage = (message) => {
+  const dispatch = useDispatch()
+  dispatch(setNotification(message, 'info'))
+}
+*/
 export default Notification

@@ -1,4 +1,5 @@
 // import { useDispatch } from 'react-redux'
+// import { setNotification } from './notificationReducer'
 
 const notificationReducer = (data = '', action) => {
   switch (action.type) {
@@ -61,7 +62,7 @@ export const setNotification = (message, type, timeout) => {
     clearTimeout(timeoutID -1)
     */
 
-  console.log(timeout)
+  console.log('timeout', timeout)
   // const dispatch = useDispatch()
   return {
     type: 'NEW_NOTIFICATION',
@@ -72,17 +73,15 @@ export const setNotification = (message, type, timeout) => {
   }
 }
 
-/*
+
 // Can't use here?
 export const setErrorMessage = (message) => {
-  const dispatch = useDispatch()
-  return dispatch(setNotification(message, 'error'))
+  // const dispatch = useDispatch()
+  return setNotification(message, 'error')
 }
 
 export const setInfoMessage = (message) => {
-  const dispatch = useDispatch()
-  return dispatch(setNotification(message, 'info'))
+  return setNotification(message, 'info')
 }
-*/
 
 export default notificationReducer
