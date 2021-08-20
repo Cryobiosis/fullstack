@@ -6,6 +6,12 @@ import BlogForm       from './components/BlogForm'
 import Notification   from './components/Notification'
 import blogService    from './services/blogs'
 import loginService   from './services/login'
+// import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
+//import { setErrorMessage, setInfoMessage } from './reducers/notificationReducer'
+// import { createStore } from 'redux'
 import './index.css'
 
 const App = () => {
@@ -16,12 +22,26 @@ const App = () => {
 
   const [username,    setUsername]      = useState('')
   const [password,    setPassword]      = useState('')
-  const [infoMessage, setInfoMessage]   = useState(null)
-  const [errorMessage,setErrorMessage]  = useState(null)
+  // const [infoMessage, setInfoMessage]   = useState(null)
+  // const [errorMessage,setErrorMessage]  = useState(null)
   const [user,        setUser]          = useState(null)
   const blogFormRef = React.createRef()
 
+  // const store = createStore(notificationReducer)
+  const notes = useSelector(state => state)
+  console.log('state=', notes)
+  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
+  const setErrorMessage = (message) => {
+    return dispatch(setNotification(message, 'error'))
+  }
+  const setInfoMessage = (message) => {
+    return dispatch(setNotification(message, 'info'))
+  }
+
   const handleLogin = async (event) => {
+
+    // setInfoMessage('test message')
     event.preventDefault()
     try {
       const user = await loginService.login({
@@ -37,7 +57,13 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
+      //setNotification('foo', 'error')
+      // dispatch(setNotification('wrong credentials', 'error'))
+
       setErrorMessage('wrong credentials')
+      // console.log('state', store.getState())
+
+      // TODO: Use timeout in reducer!
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -179,8 +205,7 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <div className='messages'>
-        <Notification message={infoMessage}  type='info'/>
-        <Notification message={errorMessage} type='error'/>
+        <Notification />
       </div>
 
       {user === null ?
