@@ -4,6 +4,8 @@ import Togglable      from './components/Togglable'
 import Blog           from './components/Blog'
 import BlogForm       from './components/BlogForm'
 import Notification   from './components/Notification'
+import Users           from './components/Users'
+
 import blogService    from './services/blogs'
 // import loginService   from './services/login'
 // import { useSelector, useDispatch } from 'react-redux'
@@ -12,6 +14,9 @@ import { useDispatch } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { intializeBlogs } from './reducers/blogReducer'
 import { logoutActionCreator } from './reducers/userReducer'
+import {
+  BrowserRouter as Router, Route, // Link, Switch
+} from 'react-router-dom'
 
 // import { setErrorMessage, setInfoMessage } from './components/Notification'
 // import { createStore } from 'redux'
@@ -175,6 +180,13 @@ const App = () => {
           {BlogFormToggle()}
         </div>
       }
+
+      <Router>
+        <Route path="/users">
+          <Users />
+        </Route>
+      </Router>
+
     </div>
   )
 }
