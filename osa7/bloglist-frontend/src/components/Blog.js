@@ -64,6 +64,35 @@ const Blog = () =>  {
     console.log('delete')
   }
 
+  const updateBlogPost = (blogPost, id) => {
+    blogService
+      .update(blogPost, id)
+      .then(returnedBlog => {
+        // Reget all blog items from server
+        blogService.getAll().then(blogs =>
+          // setBlogs( blogs )
+          console.log('TODO: setBlogs', blogs)
+        ).then(() => {
+          setInfoMessage(`blog post '${blogPost.title}' updated`)
+          // Or we could use
+          // console.log(returnedBlog)
+          // setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+          // setBlogs([])
+          console.log(returnedBlog)
+          setTimeout(() => {
+            setInfoMessage(null)
+          }, 5000)
+        })
+      }).catch(error => {
+        console.log(error)
+        setErrorMessage(`the blog '${blogPost.title}' can't be updated. Error: ${error.response.data.error}`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+    console.log('update')
+  }
+  console.log(updateBlogPost)
 
   const [full, setShowFull] = useState(false)
   const dispatch = useDispatch()
@@ -78,6 +107,7 @@ const Blog = () =>  {
   const blog = blogFilter[0]
 
   // console.log('blog:', blog)
+  if (!blog) return false
 
   const blogStyle = {
     paddingTop: 10,

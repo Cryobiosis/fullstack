@@ -7,7 +7,7 @@ import { intializeUsers } from '../reducers/userReducer'
 const userInfo = () => {
 
   const id = useParams().id
-  console.log(id)
+  //console.log(id)
 
   const dispatch = useDispatch()
 
@@ -20,7 +20,8 @@ const userInfo = () => {
   const users = useSelector(state => state.users)
 
   // Filter user
-  const user = users.filter(u => u.id === id)
+  const userFilter = users.filter(u => u.id === id)
+  const user = userFilter[0]
   // console.log('user:', user)
 
   if (!users) {
@@ -29,10 +30,10 @@ const userInfo = () => {
 
   return (
     <div className="users">
-      <h1>{user[0].name}</h1>
+      <h1>{user.name}</h1>
       <h2>Added blogs</h2>
       <ul>
-        {user[0].blogs.map((value, id) =>
+        {user.blogs.map((value, id) =>
           <li key={id}>{value.title}</li>
         )}
       </ul>
