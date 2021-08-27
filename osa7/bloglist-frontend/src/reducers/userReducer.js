@@ -1,52 +1,33 @@
-import loginService from '../services/login'
-import blogService from '../services/blogs'
+import userService from '../services/users'
 
-const loginReducer = (state = [], action) => {
-  console.log('state now: ', state)
-  console.log('action', action)
+const userReducer = (state = [], action) => {
+  // console.log('state now: ', state)
+  // console.log('action', action)
 
   switch (action.type) {
-  case 'LOGIN': {
-    // token, name, username
-    return action.data
-  }
-  case 'LOGOUT': {
-    return false
-  }
+  case 'INIT_USERS':
+    // Why this ...?
+    return [...action.data]
+
   default: return state
   }
 }
 
-export const loginActionCreator = (username, password) => {
-  // Update backend first then local redux store
+export const intializeUsers = () => {
   return async dispatch => {
     try {
-      const user = await loginService.login({
-        username, password,
+      // Get from remote server.. then dispatch, (thunk)
+      const users = await userService.getAll()
+      console.log('user:', users)
+      dispatch ({
+        type: 'INIT_USERS',
+        data: users,
       })
-      // console.log('user status in R:', user)
-      blogService.setToken(user.token)
-
-      dispatch({
-        type: 'LOGIN',
-        data: { user }
-      })
-    } catch (exception) {
-      console.log(exception)
-      // Return error in promise
-      throw new Error('Login failed')
-      // return false
+    } catch(error) {
+      console.log(error)
+      // dispatch(setError(error.response.data.error))
     }
   }
 }
 
-export const logoutActionCreator = () => {
-  return async dispatch => {
-    return dispatch({
-      type: 'LOGOUT',
-      data: { }
-    })
-  }
-}
-
-export default loginReducer
+export default userReducer

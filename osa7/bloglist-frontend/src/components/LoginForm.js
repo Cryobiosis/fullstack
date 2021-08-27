@@ -2,14 +2,13 @@ import React from 'react'
 // import PropTypes from 'prop-types'
 
 // TODO: Redux
-import { loginActionCreator } from '../reducers/userReducer'
+import { loginActionCreator } from '../reducers/loginReducer'
 import { useDispatch } from 'react-redux'
 import { setErrorMessage, setInfoMessage } from '../reducers/notificationReducer'
 // import blogService from '../services/blogs'
 
 const LoginForm = () => {
   const dispatch = useDispatch()
-
 
   const loginOK = () => {
     dispatch(setInfoMessage('Logged in'))
@@ -19,7 +18,6 @@ const LoginForm = () => {
     setTimeout(() => {
       dispatch(setInfoMessage(''))
     }, 5000)
-
   }
 
   const loginFailed = () => {

@@ -5,6 +5,7 @@ import Blog           from './components/Blog'
 import BlogForm       from './components/BlogForm'
 import Notification   from './components/Notification'
 import Users           from './components/Users'
+import User           from './components/User'
 
 import blogService    from './services/blogs'
 // import loginService   from './services/login'
@@ -13,9 +14,9 @@ import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { intializeBlogs } from './reducers/blogReducer'
-import { logoutActionCreator } from './reducers/userReducer'
+import { logoutActionCreator } from './reducers/loginReducer'
 import {
-  BrowserRouter as Router, Route, // Link, Switch
+  Route, useRouteMatch // Link, Switch
 } from 'react-router-dom'
 
 // import { setErrorMessage, setInfoMessage } from './components/Notification'
@@ -32,11 +33,10 @@ const App = () => {
   // const store = createStore(notificationReducer)
   const state = useSelector(state => state)
   const blogs = state.blogs
-  console.log('state=', state)
+  // console.log('state=', state)
 
   // User data from redux
-  const user = (state.users.length === 0) ? null : state.users.user
-  // console.log('USER:', user)
+  const user = (state.login.length === 0) ? null : state.login.user
 
   const dispatch = useDispatch()
 
@@ -138,7 +138,7 @@ const App = () => {
   // Check login information from local storage on start up
   useEffect(() => {
     // console.log('USER:', state.users)
-    const loggedUserJSON = (state.users) ? state.users.user : false
+    const loggedUserJSON = (state.login) ? state.login.user : false
 
     // Read from redux..
     // const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
@@ -164,6 +164,9 @@ const App = () => {
       <BlogForm />
     </Togglable>
   )
+  const match = useRouteMatch('/users/:id')
+  // const note = match ? notes.find(note => note.id === Number(match.params.id)) : null
+  console.log(match)
 
   return (
     <div>
@@ -181,11 +184,12 @@ const App = () => {
         </div>
       }
 
-      <Router>
-        <Route path="/users">
-          <Users />
-        </Route>
-      </Router>
+      <Route path="/users">
+        <Users />
+      </Route>
+      <Route path="/users/:id">
+        <User />
+      </Route>
 
     </div>
   )
