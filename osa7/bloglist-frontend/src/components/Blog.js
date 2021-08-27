@@ -1,10 +1,83 @@
 import React, { useState } from 'react'
 import { likeActionCreator } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import blogService    from '../services/blogs'
+import { setNotification } from '../reducers/notificationReducer'
+import { intializeBlogs } from '../reducers/blogReducer'
 
-const Blog = ({ blog, removeBlogPost, likeButton }) =>  {
+const Blog = () =>  {
+
+  const setErrorMessage = (message) => {
+    return dispatch(setNotification(message, 'error'))
+  }
+  const setInfoMessage = (message) => {
+    return dispatch(setNotification(message, 'info'))
+  }
+
+  const removeBlogPost = ({ title, id }) => {
+    if (window.confirm(`Remove blog '${title}' ?`)) {
+      blogService
+        .remove(id).then(returnedBlog => {
+          // No need for own action creator for remove...
+          // dispatch(removeActionCreator(id)).then(returnedBlog => {
+          setInfoMessage(`blog post '${title}' removed`)
+          // Or we could use
+          console.log(returnedBlog)
+          // Get all blogs again..
+          dispatch(intializeBlogs())
+
+          setTimeout(() => {
+            setInfoMessage(null)
+          }, 5000)
+        }).catch(error => {
+          console.log(error)
+          setErrorMessage(`the blog '${title}' can't be deleted. Error: ${error.response.data.error}`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })/*
+      blogService
+        .remove(id)
+        .then(returnedBlog => {
+          // Reget all blog items from server
+          blogService.getAll().then(blogs =>
+            // setBlogs( blogs )
+            console.log('TODO: setBlogs', blogs)
+          ).then(() => {
+            setInfoMessage(`blog post '${title}' removed`)
+            // Or we could use
+            console.log(returnedBlog)
+            setTimeout(() => {
+              setInfoMessage(null)
+            }, 5000)
+          })
+        }).catch(error => {
+          console.log(error)
+          setErrorMessage(`the blog '${title}' can't be deleted. Error: ${error.response.data.error}`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+        })*/
+    }
+    console.log('delete')
+  }
+
+
   const [full, setShowFull] = useState(false)
   const dispatch = useDispatch()
+
+  const id = useParams().id
+  //const dispatch = useDispatch()
+
+  const blogs = useSelector(state => state.blogs)
+
+  // Filter user
+  const blogFilter = blogs.filter(u => u.id === id)
+  const blog = blogFilter[0]
+
+  // console.log('blog:', blog)
 
   const blogStyle = {
     paddingTop: 10,
@@ -44,6 +117,7 @@ const Blog = ({ blog, removeBlogPost, likeButton }) =>  {
     // console.log('DELETE: ' + blog.id)
   }
 
+  let likeButton = false
   // 5.15: blogilistan testit, step3 requires test function to use mockup count...
   likeButton = (likeButton) ? likeButton : addLike
 

@@ -6,6 +6,9 @@ import BlogForm       from './components/BlogForm'
 import Notification   from './components/Notification'
 import Users           from './components/Users'
 import User           from './components/User'
+import {
+  Link,
+} from 'react-router-dom'
 
 import blogService    from './services/blogs'
 // import loginService   from './services/login'
@@ -151,11 +154,14 @@ const App = () => {
     }
   }, [])
 
-  const BlogsList = ({ updateBlogPost }) => (
+  const BlogsList = () => (
     <div className="blogs">
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateBlogPost={updateBlogPost} removeBlogPost={removeBlogPost}/>
-      )}
+      <ul>
+        {blogs.map(blog =>
+          /*<Blog key={blog.id} blog={blog} updateBlogPost={updateBlogPost} removeBlogPost={removeBlogPost}/>*/
+          <li key={blog.id}><Link  to={'/blogs/'+blog.id}>{blog.title}</Link></li>
+        )}
+      </ul>
     </div>
   )
 
@@ -190,7 +196,9 @@ const App = () => {
       <Route path="/users/:id">
         <User />
       </Route>
-
+      <Route path="/blogs/:id">
+        <Blog />
+      </Route>
     </div>
   )
 }
