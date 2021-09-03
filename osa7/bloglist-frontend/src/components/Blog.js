@@ -153,7 +153,7 @@ const Blog = () =>  {
 
   return (
     <div style={blogStyle} data-cy='blog'>
-      {blog.title}
+      <h1>{blog.title}</h1>
       {full === false ?
         <div>
           <button onClick={() => setShowFull(true)} type="submit">show</button>likes {blog.likes}
@@ -166,6 +166,16 @@ const Blog = () =>  {
           <button onClick={() => deleteBlog()} type="submit">remove</button>
         </div>
       }
+      <h2>Comments</h2>
+      <ul>
+        {blog.comments !== undefined && blog.comments.length > 0 ?
+          blog.comments.map((value, id) =>
+            <li key={id}> {value.comment}</li>
+          )
+          :
+          <div>No comments</div>
+        }
+      </ul>
     </div>
   )
 }

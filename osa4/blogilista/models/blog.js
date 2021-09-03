@@ -8,7 +8,11 @@ const blogSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  }
+  },
+  // TODO: Save comments to own schema and link it here..
+  comments: [
+    { comment: String }
+  ] // mongoose.Schema.Types.Mixed
 })
 
 blogSchema.set('toJSON', {
