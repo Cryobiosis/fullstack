@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState }  from 'react'
+import blogService          from '../services/blogs'
 import { likeActionCreator, commentActionCreator } from '../reducers/blogReducer'
-import { useDispatch } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import blogService    from '../services/blogs'
-import { setNotification } from '../reducers/notificationReducer'
-import { intializeBlogs } from '../reducers/blogReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams }        from 'react-router-dom'
+import { setNotification }  from '../reducers/notificationReducer'
+import { intializeBlogs }   from '../reducers/blogReducer'
 
 const Blog = () =>  {
 
@@ -102,7 +101,7 @@ const Blog = () =>  {
 
   // ID from URL
   const id = useParams().id
-  //const dispatch = useDispatch()
+
   // Get all blogs from redux
   const blogs = useSelector(state => state.blogs)
 
@@ -131,25 +130,14 @@ const Blog = () =>  {
       likes:  blog.likes +1,
       user:   blog.user.id,
     }
-    /*
-    const state = useSelector(state => state)
-    const blogToChange = state.find(n => n.id === blog.id)
-    const changedBlog = {
-      ...blogToChange,
-      likes: blogToChange.likes + 1
-    }*/
     // Redux
     dispatch(likeActionCreator(changedBlog, blog.id))
-
-    //console.log(blogPost)
-    // const copy = [...blog]
-    // updateBlogPost(blogPost, blog.id)
   }
 
   const deleteBlog = () => {
     removeBlogPost({ title: blog.title, id: blog.id })
-    // console.log('DELETE: ' + blog.id)
   }
+
   const addComment = (event) => {
     event.preventDefault()
     // Redux

@@ -1,7 +1,5 @@
 import blogsService from '../services/blogs'
 
-// const getId = () => (100000 * Math.random()).toFixed(0)
-
 const blogReducer = (state = [], action) => {
   // console.log('state now: ', state)
   // console.log('action', action)
@@ -48,7 +46,7 @@ const blogReducer = (state = [], action) => {
 }
 
 export const likeActionCreator = (changedBlog, id) => {
-  // Updte backend first then local redux store
+  // Update backend first then local redux store
   return async dispatch => {
     const newLike = await blogsService.update(changedBlog, id)
     dispatch({

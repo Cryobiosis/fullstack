@@ -7,7 +7,6 @@ import { intializeUsers } from '../reducers/userReducer'
 const userInfo = () => {
 
   const id = useParams().id
-  //console.log(id)
 
   const dispatch = useDispatch()
 

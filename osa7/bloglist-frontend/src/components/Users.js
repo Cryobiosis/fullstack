@@ -1,12 +1,9 @@
 import React, { useEffect } from 'react'
-//import { useSelector } from 'react-redux'
 import {
   Link,
 } from 'react-router-dom'
-// import userService from '../services/users'
 import { intializeUsers } from '../reducers/userReducer'
-import { useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const userList = () => {
 
@@ -23,24 +20,6 @@ const userList = () => {
   if (!users) {
     return null
   }
-
-  /*
-  // Get all blogs from redux
-  const blogs = useSelector(state => state.blogs)
-  console.log(blogs)
-  // Count users blogs
-  let users = []
-  let user = null
-  blogs.forEach(blog => {
-    console.log('blog', blog.user.id)
-    user = users.find(u => u.id === blog.user.id)
-    if (user) {
-      user.blogs++
-    } else {
-      users.push( { id: blog.user.id, name: blog.user.name, blogs: 1 } )
-    }
-  })
-*/
 
   return (
     <div className="users">

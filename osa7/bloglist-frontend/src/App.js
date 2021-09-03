@@ -1,4 +1,11 @@
 import React, { useEffect } from 'react'
+import {
+  Link,
+  Switch,
+  Route,
+  // useRouteMatch,
+} from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
 import LoginForm      from './components/LoginForm'
 import Togglable      from './components/Togglable'
 import Blog           from './components/Blog'
@@ -7,26 +14,8 @@ import Notification   from './components/Notification'
 import Users          from './components/Users'
 import User           from './components/User'
 import Header         from './components/Header'
-
-import {
-  Link,
-  Switch,
-} from 'react-router-dom'
-
 import blogService    from './services/blogs'
-// import loginService   from './services/login'
-// import { useSelector, useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
-import { useDispatch } from 'react-redux'
-// import { setNotification } from './reducers/notificationReducer'
 import { intializeBlogs } from './reducers/blogReducer'
-// import { logoutActionCreator } from './reducers/loginReducer'
-import {
-  Route, useRouteMatch // Link, Switch
-} from 'react-router-dom'
-
-// import { setErrorMessage, setInfoMessage } from './components/Notification'
-// import { createStore } from 'redux'
 import './index.css'
 
 const App = () => {
@@ -36,7 +25,6 @@ const App = () => {
   // blogs.sort((a, b) => (a.likes > b.likes) ? -1 : 1)
   const blogFormRef = React.createRef()
 
-  // const store = createStore(notificationReducer)
   const state = useSelector(state => state)
   const blogs = state.blogs
   // console.log('state=', state)
@@ -52,11 +40,9 @@ const App = () => {
 
   // Check login information from local storage on start up
   useEffect(() => {
-    // console.log('USER:', state.users)
     const loggedUserJSON = (state.login) ? state.login.user : false
 
     // Read from redux..
-    // const loggedUserJSON = window.localStorage.getItem('loggedBlogUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       if (user) {
@@ -70,7 +56,6 @@ const App = () => {
     <div className="blogs">
       <ul>
         {blogs.map(blog =>
-          /*<Blog key={blog.id} blog={blog} updateBlogPost={updateBlogPost} removeBlogPost={removeBlogPost}/>*/
           <li key={blog.id}><Link  to={'/blogs/'+blog.id}>{blog.title}</Link></li>
         )}
       </ul>
@@ -82,9 +67,9 @@ const App = () => {
     </Togglable>
   )
 
-  const match = useRouteMatch('/users/:id')
+  // const match = useRouteMatch('/users/:id')
   // const note = match ? notes.find(note => note.id === Number(match.params.id)) : null
-  console.log(match)
+  // console.log(match)
 
   return (
     <div>
