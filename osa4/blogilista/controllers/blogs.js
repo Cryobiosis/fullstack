@@ -138,14 +138,18 @@ blogsRouter.post('/:id/comments', async (request, response) => {
   // Get blog post
   const blog = await Blog.findById(request.params.id)
 
-  const comment = {comment: request.body.comment}
+  const comment = { comment: request.body.comment }
   blog.comments.push(comment)
 
   // console.log(blog)
 
   const savedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { useFindAndModify:false, new: false })
   response.status(201)
-  response.json(savedBlog.toJSON())
+  // response.json(savedBlog.toJSON())
+
+  // Reget blog with updated data
+  const blog2 = await Blog.findById(request.params.id)
+  response.json(blog2.toJSON())
 })
 
 module.exports = blogsRouter

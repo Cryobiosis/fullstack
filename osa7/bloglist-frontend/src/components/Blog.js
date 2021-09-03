@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { likeActionCreator } from '../reducers/blogReducer'
+import { likeActionCreator, commentActionCreator } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
@@ -16,6 +16,7 @@ const Blog = () =>  {
     return dispatch(setNotification(message, 'info'))
   }
 
+  // TODO: Rewrite removeBlogPost to use redux store!
   const removeBlogPost = ({ title, id }) => {
     if (window.confirm(`Remove blog '${title}' ?`)) {
       blogService
@@ -64,6 +65,8 @@ const Blog = () =>  {
     console.log('delete')
   }
 
+  // TODO: Rewrite updateBlogPost to use redux store!
+  /*
   const updateBlogPost = (blogPost, id) => {
     blogService
       .update(blogPost, id)
@@ -91,15 +94,16 @@ const Blog = () =>  {
         }, 5000)
       })
     console.log('update')
-  }
-  console.log(updateBlogPost)
+  }*/
+  // console.log(updateBlogPost)
 
   const [full, setShowFull] = useState(false)
   const dispatch = useDispatch()
 
+  // ID from URL
   const id = useParams().id
   //const dispatch = useDispatch()
-
+  // Get all blogs from redux
   const blogs = useSelector(state => state.blogs)
 
   // Filter user
@@ -146,6 +150,13 @@ const Blog = () =>  {
     removeBlogPost({ title: blog.title, id: blog.id })
     // console.log('DELETE: ' + blog.id)
   }
+  const addComment = (event) => {
+    event.preventDefault()
+    // Redux
+    dispatch(commentActionCreator( { comment: event.target.comment.value }, blog.id))
+    // Reset form
+    event.target.comment.value = ''
+  }
 
   let likeButton = false
   // 5.15: blogilistan testit, step3 requires test function to use mockup count...
@@ -167,6 +178,9 @@ const Blog = () =>  {
         </div>
       }
       <h2>Comments</h2>
+      <form onSubmit={addComment}>
+        <input type="text" name="comment"></input> <button type="submit">add comment</button>
+      </form>
       <ul>
         {blog.comments !== undefined && blog.comments.length > 0 ?
           blog.comments.map((value, id) =>

@@ -28,6 +28,16 @@ const blogReducer = (state = [], action) => {
     return state.concat(newblog)
     // return { ...state, newblog }
   }
+  case 'COMMENT': {
+    console.log('COMMENT RE', action.data.updatedBlog)
+    const id = action.data.updatedBlog.id
+    console.log('COMMENT RE id', id)
+
+    // Backend returns changed blog item
+    return state.map(ane =>
+      ane.id !== id ? ane : action.data.updatedBlog
+    )
+  }
   /*case 'REMOVE':
     return action.data.id*/
   case 'INIT_BLOGS':
@@ -48,6 +58,19 @@ export const likeActionCreator = (changedBlog, id) => {
     console.log(newLike)
   }
 }
+
+export const commentActionCreator = (commentObject, id) => {
+  // Updte backend first then local redux store
+  return async dispatch => {
+    const updatedBlog = await blogsService.comment(commentObject, id)
+    dispatch({
+      type: 'COMMENT',
+      data: { updatedBlog }
+    })
+    console.log(updatedBlog)
+  }
+}
+
 /*
 export const removeActionCreator = (id) => {
   // Updte backend first then local redux store
