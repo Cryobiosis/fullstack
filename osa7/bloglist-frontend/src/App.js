@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import {
-  Link,
+// Link,
   Switch,
   Route,
   // useRouteMatch,
@@ -14,9 +14,13 @@ import Notification   from './components/Notification'
 import Users          from './components/Users'
 import User           from './components/User'
 import Header         from './components/Header'
+import BlogList       from './components/BlogList'
+// import BlogCards      from './components/BlogCards'
+
 import blogService    from './services/blogs'
 import { intializeBlogs } from './reducers/blogReducer'
 import './index.css'
+import Container from '@material-ui/core/Container'
 
 const App = () => {
 
@@ -51,7 +55,7 @@ const App = () => {
       }
     }
   }, [])
-
+  /*
   const BlogsList = () => (
     <div className="blogs">
       <ul>
@@ -60,7 +64,8 @@ const App = () => {
         )}
       </ul>
     </div>
-  )
+  )*/
+
   const BlogFormToggle = () => (
     <Togglable buttonLabel='new blog post' ref={blogFormRef}>
       <BlogForm />
@@ -72,9 +77,8 @@ const App = () => {
   // console.log(match)
 
   return (
-    <div>
+    <Container>
       <Header />
-      <h2>blogs app</h2>
       <div className='messages'>
         <Notification />
       </div>
@@ -89,13 +93,15 @@ const App = () => {
           <Blog />
         </Route>
         <Route path="/blogs">
-          {user === null ? 'foo'
+          {user === null ? ''
             :
             <div>
               {BlogFormToggle()}
             </div>
           }
-          <BlogsList />
+          {/* Alternative cards layout */}
+          {/*<BlogCards blogs={blogs}/>*/}
+          <BlogList blogs={blogs}/>
         </Route>
         <Route path="/login">
           <LoginForm></LoginForm>
@@ -103,7 +109,7 @@ const App = () => {
         <Route path="/">
         </Route>
       </Switch>
-    </div>
+    </Container>
   )
 }
 

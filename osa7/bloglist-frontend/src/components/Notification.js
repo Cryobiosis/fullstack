@@ -2,7 +2,11 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 //import { useDispatch } from 'react-redux'
 //import { setNotification } from '../reducers/notificationReducer'
+import { Alert } from '@material-ui/lab'
 
+import {
+  Snackbar,
+} from '@material-ui/core'
 const Notification = () => {
 
   // Redux with hooks
@@ -11,13 +15,33 @@ const Notification = () => {
 
   // console.log('message selector state', message)
 
+  const [open, setOpen] = React.useState(true)
+
   if (message === null) {
     return null
   }
+  /*
+  const handleClick = () => {
+    setOpen(true)
+  }*/
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setOpen(false)
+  }
 
   return (
-    <div className={type}>
-      {message}
+    <div>
+      {/*<Alert severity={type}>
+        {message}
+        </Alert>*/}
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={type}>
+          {message}
+        </Alert>
+      </Snackbar>
     </div>
   )
 }

@@ -5,12 +5,17 @@ import { logoutActionCreator } from '../reducers/loginReducer'
 import {
   Link,
 } from 'react-router-dom'
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Typography,
+  IconButton,
+} from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import HomeIcon from '@material-ui/icons/Home'
 
 const Header = () => {
-
-  const padding = {
-    padding: 5
-  }
 
   const dispatch = useDispatch()
   const handleLogout = async () => {
@@ -23,20 +28,40 @@ const Header = () => {
   const state = useSelector(state => state)
   const user = (state.login.length === 0) ? null : state.login.user
 
+  const useStyles = makeStyles(() => ({
+    title: {
+      flexGrow: 1,
+    },
+  }))
+  const classes = useStyles()
+
   return (
     <div>
-      <div>
-        <Link style={padding} to="/">home</Link>
-        <Link style={padding} to="/blogs">blogs</Link>
-        <Link style={padding} to="/users">users</Link>
-        {user === null
-          ? <Link style={padding} to="/login">login</Link>
-          :
-          <div>
-            <p>{user.name} logged in</p><button onClick={() => handleLogout()} type="submit">logout</button>
-          </div>
-        }
-      </div>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+            <Button color="inherit" component={Link} to="/">
+              <HomeIcon />
+            </Button>
+          </IconButton>
+          <Typography variant="h6" className={classes.title}>
+            <Button color="inherit" component={Link} to="/blogs">
+              blogs
+            </Button>
+            <Button color="inherit" component={Link} to="/users">
+              users
+            </Button>
+          </Typography>
+          {user
+            ? <div>
+              <em>{user.name} logged in</em> <Button onClick={() => handleLogout()} type="submit">logout</Button>
+            </div>
+            : <Button color="inherit" component={Link} to="/login">
+                login
+            </Button>
+          }
+        </Toolbar>
+      </AppBar>
     </div>
   )
 }

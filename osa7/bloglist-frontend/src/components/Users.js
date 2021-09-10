@@ -4,11 +4,20 @@ import {
 } from 'react-router-dom'
 import { intializeUsers } from '../reducers/userReducer'
 import { useDispatch, useSelector } from 'react-redux'
+import {
+  // Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+  TableHead,
+} from '@material-ui/core'
 
 const userList = () => {
 
   const dispatch = useDispatch()
-  let table = ''
 
   // Get all users posts on start up
   useEffect(() => {
@@ -24,19 +33,28 @@ const userList = () => {
   return (
     <div className="users">
       <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Blogs created</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((value, id) =>
-            <tr key={id}><td> <Link to={'/users/'+value.id}>{value.name}</Link></td><td>{value.blogs.length}</td></tr>
-          )}
-        </tbody>
-      </table>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell align="right">Blogs created</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map(user => (
+              <TableRow key={user.id}>
+                <TableCell>
+                  <Link to={'/users/'+user.id}>{user.name}</Link>
+                </TableCell>
+                <TableCell align="right">
+                  {user.blogs.length}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   )
 }

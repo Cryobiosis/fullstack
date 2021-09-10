@@ -1,4 +1,4 @@
-import React, { useState }  from 'react'
+import React                from 'react'
 import blogService          from '../services/blogs'
 import { likeActionCreator, commentActionCreator } from '../reducers/blogReducer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,6 +6,14 @@ import { useParams }        from 'react-router-dom'
 import { setNotification }  from '../reducers/notificationReducer'
 import { intializeBlogs }   from '../reducers/blogReducer'
 
+import {
+  // Container,
+  List,
+  ListItem,
+  ListItemText,
+  TextField,
+  Button,
+} from '@material-ui/core'
 const Blog = () =>  {
 
   const setErrorMessage = (message) => {
@@ -96,7 +104,6 @@ const Blog = () =>  {
   }*/
   // console.log(updateBlogPost)
 
-  const [full, setShowFull] = useState(false)
   const dispatch = useDispatch()
 
   // ID from URL
@@ -153,31 +160,34 @@ const Blog = () =>  {
   return (
     <div style={blogStyle} data-cy='blog'>
       <h1>{blog.title}</h1>
-      {full === false ?
-        <div>
-          <button onClick={() => setShowFull(true)} type="submit">show</button>likes {blog.likes}
-        </div> :
-        <div>
-          <p>{blog.author}</p>
-          <p>{blog.url}</p>
-          <div>likes {blog.likes} <button onClick={() => likeButton() } type="submit">like</button></div>
-          <button onClick={() => setShowFull(false)} type="submit">hide</button>
-          <button onClick={() => deleteBlog()} type="submit">remove</button>
-        </div>
-      }
+      <div>
+        <p>{blog.author}</p>
+        <p>{blog.url}</p>
+        <div>likes {blog.likes} <Button color="primary" onClick={() => likeButton() } type="submit">like</Button></div>
+        <Button color="secondary" onClick={() => deleteBlog()} type="submit">remove</Button>
+      </div>
       <h2>Comments</h2>
       <form onSubmit={addComment}>
-        <input type="text" name="comment"></input> <button type="submit">add comment</button>
+        <TextField label="comment" name="comment"/>
+        <Button variant="contained" color="primary" type="submit">add comment</Button>
       </form>
-      <ul>
-        {blog.comments !== undefined && blog.comments.length > 0 ?
-          blog.comments.map((value, id) =>
-            <li key={id}> {value.comment}</li>
-          )
-          :
-          <div>No comments</div>
-        }
-      </ul>
+      <div>
+        <List>
+          {blog.comments !== undefined && blog.comments.length > 0 ?
+            blog.comments.map((value, id) =>
+              <ListItem key={id}>
+                <ListItemText primary={value.comment}/>
+              </ListItem>
+            )
+            :
+            <ListItem>
+              <ListItemText
+                primary="No comments"
+              />
+            </ListItem>
+          }
+        </List>
+      </div>
     </div>
   )
 }

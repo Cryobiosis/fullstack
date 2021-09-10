@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react'
 // import PropTypes from 'prop-types'
 
@@ -6,6 +7,10 @@ import { loginActionCreator } from '../reducers/loginReducer'
 import { useDispatch } from 'react-redux'
 import { setErrorMessage, setInfoMessage } from '../reducers/notificationReducer'
 // import blogService from '../services/blogs'
+import {
+  TextField,
+  Button,
+} from '@material-ui/core'
 
 const LoginForm = () => {
   const dispatch = useDispatch()
@@ -13,25 +18,26 @@ const LoginForm = () => {
   const loginOK = () => {
     dispatch(setInfoMessage('Logged in'))
     // blogService.setToken(user.token)
+    // history.push('/')
 
     // TODO: Use timeout in reducer!
-    setTimeout(() => {
+    /*setTimeout(() => {
       dispatch(setInfoMessage(''))
-    }, 5000)
+    }, 5000)*/
   }
 
   const loginFailed = () => {
     dispatch(setErrorMessage('wrong credentials'))
     // TODO: Use timeout in reducer!
-    setTimeout(() => {
+    /*setTimeout(() => {
       dispatch(setErrorMessage(null))
-    }, 5000)
+    }, 5000) */
   }
 
   const login = async (event) => {
     event.preventDefault()
     // Dispatch returns promise
-    dispatch(loginActionCreator(event.target.Username.value, event.target.Password.value))
+    dispatch(loginActionCreator(event.target.username.value, event.target.password.value))
       .then(loginOK)
       .catch(loginFailed)
   }
@@ -40,13 +46,13 @@ const LoginForm = () => {
     <div className="loginform">
       <h2> Login </h2>
       <form onSubmit={login}>
-        <div>username
-          <input type="text" name="Username"/>
+        <div>
+          <TextField variant="outlined" label="username" name="username"/>
         </div>
-        <div>password
-          <input type="password" name="Password"/>
+        <div>
+          <TextField variant="outlined" label="password" type='password' name="password" />
         </div>
-        <button type="submit">login</button>
+        <Button variant="contained" color="primary" type="submit">login</Button>
       </form>
     </div>
   )

@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { intializeUsers } from '../reducers/userReducer'
+import { useSelector }      from 'react-redux'
+import { useParams }        from 'react-router-dom'
+import { useDispatch }      from 'react-redux'
+import { intializeUsers }   from '../reducers/userReducer'
+import BlogList             from './BlogList'
 
 const userInfo = () => {
 
@@ -29,13 +30,14 @@ const userInfo = () => {
 
   return (
     <div className="users">
-      <h1>{user.name}</h1>
-      <h2>Added blogs</h2>
+      <h1>{user.name} blogs</h1>
+      <BlogList blogs={user.blogs}/>
+      {/*
       <ul>
         {user.blogs.map((value, id) =>
           <li key={id}>{value.title}</li>
         )}
-      </ul>
+        </ul>*/}
     </div>
   )
 }
