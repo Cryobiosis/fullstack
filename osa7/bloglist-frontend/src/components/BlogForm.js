@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux'
 import { newblogActionCreator } from '../reducers/blogReducer'
 // import { setInfoMessage } from '../reducers/notificationReducer'
 import { setErrorMessage, setInfoMessage } from '../reducers/notificationReducer'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 const BlogForm = () => {
   const dispatch = useDispatch()
@@ -32,23 +34,26 @@ const BlogForm = () => {
   }
 
   return (
-    <form onSubmit={addBlog}>
-      <label>
-        title:
-        <input type="text" name="title" />
-      </label>
-      <label>
-        author:
-        <input type="text" name="author" />
-      </label>
-      <label>
-        url:
-        <input type="text" id="url" name="url" />
-      </label>
-      <div>
-        <button type="submit">create</button>
+    <Form onSubmit={addBlog} className="p-3 mb-2 bg-light text-dark" border="1">
+      <h2>Create a new blog </h2>
+      <div className="form-row align-items-center">
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Form.Label>Title</Form.Label>
+          <Form.Control type="text" placeholder="Blog title" name="title"/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Form.Label>Author</Form.Label>
+          <Form.Control type="text" placeholder="Blog author name" name="author"/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Form.Label>URL</Form.Label>
+          <Form.Control type="text" placeholder="https://" name="url"/>
+        </Form.Group>
+        <div>
+          <Button variant="primary" type="submit">create</Button>
+        </div>
       </div>
-    </form>
+    </Form>
   )
 }
 /*

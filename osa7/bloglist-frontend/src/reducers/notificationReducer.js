@@ -77,7 +77,7 @@ export const setNotification = (message, type, timeout) => {
 // Can't use here?
 export const setErrorMessage = (message) => {
   // const dispatch = useDispatch()
-  return setNotification(message, 'error')
+  return setNotification(message, 'warning')
 }
 
 export const setInfoMessage = (message) => {

@@ -6,6 +6,8 @@ import { loginActionCreator } from '../reducers/loginReducer'
 import { useDispatch } from 'react-redux'
 import { setErrorMessage, setInfoMessage } from '../reducers/notificationReducer'
 // import blogService from '../services/blogs'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 const LoginForm = () => {
   const dispatch = useDispatch()
@@ -39,15 +41,21 @@ const LoginForm = () => {
   return (
     <div className="loginform">
       <h2> Login </h2>
-      <form onSubmit={login}>
-        <div>username
-          <input type="text" name="Username"/>
-        </div>
-        <div>password
-          <input type="password" name="Password"/>
-        </div>
-        <button type="submit">login</button>
-      </form>
+      <Form onSubmit={login} className="mb-3">
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Form.Label>Username</Form.Label>
+          <Form.Control type="text" placeholder="username" name="Username"/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" name="Password"/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
+          <Button variant="primary" type="submit">
+              login
+          </Button>
+        </Form.Group>
+      </Form>
     </div>
   )
 }

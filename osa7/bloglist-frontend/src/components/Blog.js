@@ -5,6 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams }        from 'react-router-dom'
 import { setNotification }  from '../reducers/notificationReducer'
 import { intializeBlogs }   from '../reducers/blogReducer'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 
 const Blog = () =>  {
 
@@ -112,14 +116,6 @@ const Blog = () =>  {
   // console.log('blog:', blog)
   if (!blog) return false
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
   const addLike = () => {
     //event.preventDefault()
     const changedBlog = {
@@ -151,33 +147,42 @@ const Blog = () =>  {
   likeButton = (likeButton) ? likeButton : addLike
 
   return (
-    <div style={blogStyle} data-cy='blog'>
-      <h1>{blog.title}</h1>
-      {full === false ?
-        <div>
-          <button onClick={() => setShowFull(true)} type="submit">show</button>likes {blog.likes}
-        </div> :
-        <div>
-          <p>{blog.author}</p>
-          <p>{blog.url}</p>
-          <div>likes {blog.likes} <button onClick={() => likeButton() } type="submit">like</button></div>
-          <button onClick={() => setShowFull(false)} type="submit">hide</button>
-          <button onClick={() => deleteBlog()} type="submit">remove</button>
-        </div>
-      }
-      <h2>Comments</h2>
-      <form onSubmit={addComment}>
-        <input type="text" name="comment"></input> <button type="submit">add comment</button>
-      </form>
-      <ul>
-        {blog.comments !== undefined && blog.comments.length > 0 ?
-          blog.comments.map((value, id) =>
-            <li key={id}> {value.comment}</li>
-          )
-          :
-          <div>No comments</div>
-        }
-      </ul>
+    <div data-cy='blog'>
+      <Container>
+        <Row>
+          <Col>
+            <h1>{blog.title}</h1>
+            <p>{blog.author}</p>
+            <p>{blog.url}</p>
+          </Col>
+          <Col>
+            {full === false ?
+              <Button onClick={() => setShowFull(true)} type="submit">show likes</Button>
+              :
+              <div>likes {blog.likes} <Button variant="success" onClick={() => likeButton() } type="submit">like</Button></div>
+            }
+            <Button variant="info" onClick={() => setShowFull(false)} type="submit">hide</Button>
+            <Button variant="danger" onClick={() => deleteBlog()} type="submit">remove</Button>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <h2>Comments</h2>
+            <form onSubmit={addComment}>
+              <input type="text" name="comment"></input> <Button variant="success" type="submit">add comment</Button>
+            </form>
+            <ul>
+              {blog.comments !== undefined && blog.comments.length > 0 ?
+                blog.comments.map((value, id) =>
+                  <li key={id}> {value.comment}</li>
+                )
+                :
+                <div>No comments</div>
+              }
+            </ul>
+          </Col>
+        </Row>
+      </Container>
     </div>
   )
 }

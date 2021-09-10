@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import {
-  Link,
+  // Link,
   Switch,
   Route,
   // useRouteMatch,
@@ -14,9 +14,11 @@ import Notification   from './components/Notification'
 import Users          from './components/Users'
 import User           from './components/User'
 import Header         from './components/Header'
+import Bloglist       from './components/Bloglist'
 import blogService    from './services/blogs'
 import { intializeBlogs } from './reducers/blogReducer'
 import './index.css'
+// import 'bootstrap/dist/css/bootstrap.min.css'
 
 const App = () => {
 
@@ -52,15 +54,6 @@ const App = () => {
     }
   }, [])
 
-  const BlogsList = () => (
-    <div className="blogs">
-      <ul>
-        {blogs.map(blog =>
-          <li key={blog.id}><Link  to={'/blogs/'+blog.id}>{blog.title}</Link></li>
-        )}
-      </ul>
-    </div>
-  )
   const BlogFormToggle = () => (
     <Togglable buttonLabel='new blog post' ref={blogFormRef}>
       <BlogForm />
@@ -72,9 +65,8 @@ const App = () => {
   // console.log(match)
 
   return (
-    <div>
+    <div className="container">
       <Header />
-      <h2>blogs app</h2>
       <div className='messages'>
         <Notification />
       </div>
@@ -89,13 +81,13 @@ const App = () => {
           <Blog />
         </Route>
         <Route path="/blogs">
-          {user === null ? 'foo'
+          {user === null ? ''
             :
             <div>
               {BlogFormToggle()}
             </div>
           }
-          <BlogsList />
+          <Bloglist blogs={blogs}/>
         </Route>
         <Route path="/login">
           <LoginForm></LoginForm>

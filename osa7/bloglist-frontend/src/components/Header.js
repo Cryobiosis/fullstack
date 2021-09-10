@@ -5,12 +5,12 @@ import { logoutActionCreator } from '../reducers/loginReducer'
 import {
   Link,
 } from 'react-router-dom'
+import Nav from 'react-bootstrap/Nav'
+import Navbar from 'react-bootstrap/Navbar'
+import Container from 'react-bootstrap/Container'
+import Button from 'react-bootstrap/Button'
 
 const Header = () => {
-
-  const padding = {
-    padding: 5
-  }
 
   const dispatch = useDispatch()
   const handleLogout = async () => {
@@ -24,20 +24,30 @@ const Header = () => {
   const user = (state.login.length === 0) ? null : state.login.user
 
   return (
-    <div>
-      <div>
-        <Link style={padding} to="/">home</Link>
-        <Link style={padding} to="/blogs">blogs</Link>
-        <Link style={padding} to="/users">users</Link>
-        {user === null
-          ? <Link style={padding} to="/login">login</Link>
-          :
-          <div>
-            <p>{user.name} logged in</p><button onClick={() => handleLogout()} type="submit">logout</button>
-          </div>
-        }
-      </div>
-    </div>
+    <Navbar collapseOnSelect expand="lg">
+      <Container>
+        <Navbar.Brand href="/">Blogs app</Navbar.Brand>
+        <Nav defaultActiveKey="/" className="me-auto">
+          <Nav.Item>
+            <Nav.Link><Link to="/blogs">blogs</Link></Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link><Link to="/users">users</Link></Nav.Link>
+          </Nav.Item>
+        </Nav>
+        <Nav>
+          <Nav.Item>
+            <Nav.Link> {user === null
+              ? <Link to="/login">login</Link>
+              :
+              <p><strong>{user.name}</strong> <Button onClick={() => handleLogout()} type="submit"variant="primary">logout</Button>{' '}
+              </p>
+            }
+            </Nav.Link>
+          </Nav.Item>
+        </Nav>
+      </Container>
+    </Navbar>
   )
 }
 

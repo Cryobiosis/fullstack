@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { intializeUsers } from '../reducers/userReducer'
+import Bloglist       from '../components/Bloglist'
 
 const userInfo = () => {
 
@@ -31,11 +32,8 @@ const userInfo = () => {
     <div className="users">
       <h1>{user.name}</h1>
       <h2>Added blogs</h2>
-      <ul>
-        {user.blogs.map((value, id) =>
-          <li key={id}>{value.title}</li>
-        )}
-      </ul>
+
+      <Bloglist blogs={user.blogs}/>
     </div>
   )
 }
