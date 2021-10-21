@@ -13,6 +13,7 @@ client.query({ ALL_AUTHORS })
 
 const App = () => {
   const [page, setPage] = useState('authors')
+  const [errorMessage, setErrorMessage] = useState(null)
 
   const allAuthors = useQuery(ALL_AUTHORS)
   /*if (allAuthors.loading)  {
@@ -24,9 +25,16 @@ const App = () => {
     return <div>loading...</div>
   }
 
- 
+  const notify = (message) => {
+    setErrorMessage(message)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 10000)  
+  }
   return (
     <div>
+       <Notify errorMessage={errorMessage} />
+
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
         <button onClick={() => setPage('books')}>books</button>
@@ -44,11 +52,21 @@ const App = () => {
       />
 
       <NewBook
+        setError={notify}
         show={page === 'add'}
       />
 
     </div>
   )
 }
+
+const Notify = ({errorMessage}) => {
+  if ( !errorMessage ) {
+    return null
+  }  return (
+  <div style={{color: 'red'}}>
+    {errorMessage}
+    </div>
+)}
 
 export default App
