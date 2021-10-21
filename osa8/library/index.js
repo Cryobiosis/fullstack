@@ -111,6 +111,10 @@ type Mutation {
     genres: [String]
     author: String!
   ): Book
+  editAuthor(
+    name: String!
+    setBornTo: Int!
+  ): Author
 }
 `
 const { v1: uuid } = require('uuid')
@@ -160,6 +164,16 @@ const resolvers = {
       }
 
       return book
+    }, 
+    editAuthor: (root, args) => {
+      const author = authors.find(p => p.name === args.name)
+      if (!author) {
+        return null
+      }
+  
+      const updatedAuthor = { ...author, born: args.setBornTo }
+      authors = authors.map(p => p.name === args.name ? updatedAuthor : p)
+      return updatedAuthor
     }
   }
 }
