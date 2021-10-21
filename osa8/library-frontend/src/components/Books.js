@@ -6,7 +6,12 @@ const Books = (props) => {
     return null
   }
 
-  const books = []
+  const books = props.books
+  console.log(books)
+  
+  if (!books)  {
+    return <div>loading...</div>
+  }
 
   return (
     <div>
