@@ -95,6 +95,7 @@ type Author {
   name: String!
   id: ID!
   bookCount: Int
+  born: Int
 }
 type Query {
   bookCount: Int!
@@ -103,7 +104,16 @@ type Query {
   allAuthors: [Author!]!
   findAuthor(name: String!): Author
 }
+type Mutation {
+  addBook(
+    title: String!
+    published: Int
+    genres: [String]
+    author: String!
+  ): Book
+}
 `
+const { v1: uuid } = require('uuid')
 
 const resolvers = {
   Query: {
@@ -112,16 +122,18 @@ const resolvers = {
     allBooks: (root, args) => {
       let _books = books
 
+      // Filter by genre
       if (args.genre) {
         // NOTE: genres is array, so multiple values
         _books = _books.filter(b => b.genres.includes(args.genre)
         )
       }
 
+      // Filter by author
       if (args.author)
         _books = _books.filter(b => b.author === args.author)
       
-        return _books
+      return _books
     },
     allAuthors: (root, args) => authors,
   },
@@ -130,6 +142,24 @@ const resolvers = {
       // console.log(root.name)
       const authorBooks = books.filter(b => b.author === root.name)
       return authorBooks.length
+    }
+  },
+  Mutation: {
+    addBook: (root, args) => {
+      const book = { ...args, id: uuid() }
+      books = books.concat(book)
+      // Add also author if it is missing
+      const _author = authors.filter(b => b.author === args.author)
+      if (!_author.length) {
+        const author = { 
+          name: args.author,
+          born: null, 
+          id: uuid() 
+        }
+        authors = authors.concat(author)
+      }
+
+      return book
     }
   }
 }
