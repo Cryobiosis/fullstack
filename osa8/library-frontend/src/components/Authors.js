@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries'
+import Select from 'react-select';
 
 const Authors = (props) => {
  
@@ -22,11 +23,15 @@ const Authors = (props) => {
   const submit = async (event) => {
     event.preventDefault()
     
-    updateBirthYear({ variables: { name, birthyear: Number(birthyear) }})
+    updateBirthYear({ variables: { name: name.value, birthyear: Number(birthyear) }})
 
     setName('')
     setBirthyear('')
   }
+  
+  // https://www.codegrepper.com/code-examples/javascript/javascript+map+array+of+objects
+  const options = authors.map(a => ({'value': a.name, 'label': a.name}) )
+  // console.log(options)
 
   return (
     <div>
@@ -55,9 +60,12 @@ const Authors = (props) => {
       <form onSubmit={submit}>
         <div>
           name
-          <input
+          <Select
+            name={name}
             value={name}
-            onChange={({ target }) => setName(target.value)}
+            onChange={setName}
+            // onChange={({ target }) => setName(selectedOption)}
+            options={options}
           />
           birthyear
           <input
