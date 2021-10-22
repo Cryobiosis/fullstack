@@ -148,31 +148,38 @@ const resolvers = {
     // MongooseError: Query was already executed: 
     // https://stackoverflow.com/questions/69346158/mongooseerror-query-was-already-executed-user-countdocuments
     allBooks: async (root, args) => {
-      return await Book.find({})
-      
-      let _books = Book.find({})
+      let _search = {}
 
-      /*
       // Filter by genre
+      if (args.genre) {
+        _search = { genres: {$in: [args.genre] } }
+      }
+        
+      // Filter by author
+      if (args.author) {
+        const author = await Author.findOne({ name: args.author })
+        _search = { author: author._id }
+      }
+        
+      /*
       if (args.genre) {
         // NOTE: genres is array, so multiple values
         _books = _books.filter(b => b.genres.includes(args.genre)
         )
       }
-
-      // Filter by author
       if (args.author)
         _books = _books.filter(b => b.author === args.author)
+      // return await Book.find({{author:})
       */
-      return _books
+      return await Book.find(_search)
     },
     allAuthors: async (root, args) => await Author.find({}) // authors,
   },
   Author: {
-    bookCount: (root, args) => {
-      // console.log(root.name)
-      const authorBooks = books.filter(b => b.author === root.name)
-      return authorBooks.length
+    bookCount: async (root, args) => {
+      const author = Author.findOne({ name: args.name })
+      if (!author) return 0
+      return await Book.count({author: root._id})
     }
   },
   Mutation: {
@@ -184,12 +191,9 @@ const resolvers = {
       if (!author) {
         const _author = Author({ name: args.author })
         await _author.save();
-        console.log(_author)
       }
       const authorId = author.id ? author.id : _author.id
-      console.log(authorId)
       const _book = new Book({ ...args, author: authorId })
-      console.log(_book)
 
       try {
         await _book.save();
@@ -200,6 +204,7 @@ const resolvers = {
       }
 
       return _book
+      /*
       const book = { ...args, id: uuid() }
       books = books.concat(book)
       // Add also author if it is missing
@@ -212,10 +217,21 @@ const resolvers = {
         }
         authors = authors.concat(author)
       }
-
+      */
       return book
     }, 
-    editAuthor: (root, args) => {
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name })
+      author.born = args.setBornTo
+
+      try {
+        await author.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
+    /*
       const author = authors.find(p => p.name === args.name)
       if (!author) {
         return null
@@ -223,7 +239,7 @@ const resolvers = {
   
       const updatedAuthor = { ...author, born: args.setBornTo }
       authors = authors.map(p => p.name === args.name ? updatedAuthor : p)
-      return updatedAuthor
+      return updatedAuthor*/
     }
   }
 }
