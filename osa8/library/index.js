@@ -1,5 +1,24 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, UserInputError, gql } = require('apollo-server')
+const { v1: uuid } = require('uuid')
 
+const mongoose = require('mongoose')
+const Book = require('./models/book')
+const Author = require('./models/author')
+
+require('dotenv').config()
+const MONGODB_URI = process.env.MONGODB_URL
+
+console.log('connecting to', MONGODB_URI)
+
+mongoose.connect(MONGODB_URI)
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connection to MongoDB:', error.message)
+  })
+
+/*
 let authors = [
   {
     name: 'Robert Martin',
@@ -25,12 +44,13 @@ let authors = [
     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
   },
 ]
+*/
 
 /*
  * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
  * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
 */
-
+/*
 let books = [
   {
     title: 'Clean Code',
@@ -82,13 +102,14 @@ let books = [
     genres: ['classic', 'revolution']
   },
 ]
+*/
 
 const typeDefs = gql`
 type Book {
   title: String!
-  published: Int
-  genres: [String]
-  author: String!
+  published: Int!
+  author: Author!
+  genres: [String!]!
   id: ID!
 }
 type Author {
@@ -117,15 +138,21 @@ type Mutation {
   ): Author
 }
 `
-const { v1: uuid } = require('uuid')
+//  
+console.log('debug')
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (root, args) => {
-      let _books = books
+    bookCount: async () => await Book.count(), // books.length,
+    authorCount: async () => await Author.count(), // authors.length,
+    // MongooseError: Query was already executed: 
+    // https://stackoverflow.com/questions/69346158/mongooseerror-query-was-already-executed-user-countdocuments
+    allBooks: async (root, args) => {
+      return await Book.find({})
+      
+      let _books = Book.find({})
 
+      /*
       // Filter by genre
       if (args.genre) {
         // NOTE: genres is array, so multiple values
@@ -136,10 +163,10 @@ const resolvers = {
       // Filter by author
       if (args.author)
         _books = _books.filter(b => b.author === args.author)
-      
+      */
       return _books
     },
-    allAuthors: (root, args) => authors,
+    allAuthors: async (root, args) => await Author.find({}) // authors,
   },
   Author: {
     bookCount: (root, args) => {
@@ -149,7 +176,30 @@ const resolvers = {
     }
   },
   Mutation: {
-    addBook: (root, args) => {
+    addBook: async (root, args) => {
+      console.log('add book')
+      const author = await Author.findOne({ name: args.author }) 
+      // Save new author
+      console.log(args.author)
+      if (!author) {
+        const _author = Author({ name: args.author })
+        await _author.save();
+        console.log(_author)
+      }
+      const authorId = author.id ? author.id : _author.id
+      console.log(authorId)
+      const _book = new Book({ ...args, author: authorId })
+      console.log(_book)
+
+      try {
+        await _book.save();
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
+
+      return _book
       const book = { ...args, id: uuid() }
       books = books.concat(book)
       // Add also author if it is missing
