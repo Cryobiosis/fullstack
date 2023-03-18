@@ -4,6 +4,7 @@ const { v1: uuid } = require('uuid')
 const mongoose = require('mongoose')
 const Book = require('./models/book')
 const Author = require('./models/author')
+const User = require('./models/user')
 
 require('dotenv').config()
 const MONGODB_URI = process.env.MONGODB_URL
@@ -112,19 +113,33 @@ type Book {
   genres: [String!]!
   id: ID!
 }
+
 type Author {
   name: String!
   id: ID!
   bookCount: Int
   born: Int
 }
+
+type User {
+  username: String!
+  favoriteGenre: String!
+  id: ID!
+}
+
+type Token {
+  value: String!
+}
+
 type Query {
   bookCount: Int!
   authorCount: Int!
   allBooks(author: String, genre: String): [Book!]!
   allAuthors: [Author!]!
   findAuthor(name: String!): Author
+  me: User
 }
+
 type Mutation {
   addBook(
     title: String!
@@ -132,11 +147,23 @@ type Mutation {
     genres: [String]
     author: String!
   ): Book
+
   editAuthor(
     name: String!
     setBornTo: Int!
   ): Author
+
+  createUser(
+    username: String!
+    favoriteGenre: String!
+  ): User
+
+  login(
+    username: String!
+    password: String!
+  ): Token
 }
+
 `
 //  
 console.log('debug')
@@ -184,17 +211,29 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args) => {
-      console.log('add book')
-      const author = await Author.findOne({ name: args.author }) 
+      if (args.author.length < 4) {
+        throw new UserInputError('Author name < 4 chars')
+      }
+      const author = await Author.findOne({ name: args.author })
       // Save new author
-      console.log(args.author)
       if (!author) {
         const _author = Author({ name: args.author })
-        await _author.save();
+        try {
+          await _author.save();
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          })
+        }
       }
       const authorId = author.id ? author.id : _author.id
       const _book = new Book({ ...args, author: authorId })
 
+      // TODO: Add validation
+      if (args.title.length < 4) {
+        throw new UserInputError('Book title < 4 chars')
+      }
+      
       try {
         await _book.save();
       } catch (error) {
@@ -220,6 +259,7 @@ const resolvers = {
       */
       return book
     }, 
+
     editAuthor: async (root, args) => {
       const author = await Author.findOne({ name: args.name })
       author.born = args.setBornTo
@@ -231,16 +271,32 @@ const resolvers = {
           invalidArgs: args,
         })
       }
-    /*
-      const author = authors.find(p => p.name === args.name)
-      if (!author) {
-        return null
+    },
+    createUser: (root, args) => {
+      const user = new User({ username: args.username })
+  
+      return user.save()
+        .catch(error => {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          })
+        })
+    },
+    login: async (root, args) => {
+      const user = await User.findOne({ username: args.username })
+  
+      if ( !user || args.password !== 'secret' ) {
+        throw new UserInputError("wrong credentials")
       }
   
-      const updatedAuthor = { ...author, born: args.setBornTo }
-      authors = authors.map(p => p.name === args.name ? updatedAuthor : p)
-      return updatedAuthor*/
-    }
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
+  
+      return { value: jwt.sign(userForToken, JWT_SECRET) }
+    },
+    // TODO me
   }
 }
 
